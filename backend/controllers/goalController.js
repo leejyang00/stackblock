@@ -19,8 +19,12 @@ const setGoals = asyncHandler( async (req, res) => {
 
     if (!req.body.text) {
         res.status(400)
-        throw new Error("please add a text field")
+        throw new Error("E: please add a text field")
     }
+
+    // console.log(req.user)
+    // console.log(req.user._id)
+
     
     const goal = await Goal.create({
         text: req.body.text,
@@ -72,6 +76,7 @@ const deleteGoals = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error("Goal not found")
     }
+
 
     // Check for user
     if (!req.user) {
