@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FaSignInAlt } from "react-icons/fa";
+// import { FaSignInAlt } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 // useSelector: select something from the state
 // useDispatch: dispatch function, like register (asyncThunk), or reset in reducer
@@ -136,7 +136,7 @@ const LoginPage = () => {
 
               <div className="text-sm">
                 <a
-                  href="#"
+                  href="/"
                   className="font-medium text-indigo-600 hover:text-indigo-500"
                 >
                   Forgot your password?

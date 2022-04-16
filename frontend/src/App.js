@@ -3,14 +3,12 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
 import Home from './pages/Home';
-import Header from './components/Header';
 import UserProfile from './pages/UserProfile';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import AskQuestion from './pages/AskQuestion';
 
 const App = () => {
-
-  const user = localStorage.getItem('user')
 
   return (
     <>
@@ -21,6 +19,7 @@ const App = () => {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<UserProfile />} />
+            <Route path="ask-a-question" element={<AskQuestion />} />
           </Routes>
         </div>
       </Router>

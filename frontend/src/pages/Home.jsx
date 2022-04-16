@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Spinner from "../components/Spinner";
-import { getGoals, reset } from "../features/goals/goalsSlice";
+import { reset } from "../features/goals/goalsSlice";
 import { toast } from "react-toastify";
 
 import GoalForm from "../components/GoalForm";
@@ -27,7 +27,7 @@ const Home = () => {
     //   navigate("/login");
     // }
     
-    {user && dispatch(getGoals())};
+    // {user && dispatch(getGoals())};
 
     return () => {
       dispatch(reset());
@@ -44,7 +44,7 @@ const Home = () => {
         <div className="flex flex-col justify-center items-center">
           {user ? (
             <div>
-              <h1 className="text-3xl">Welcome {user && user.name}</h1>
+              <h1 className="text-3xl">Welcome {user && user.username}</h1>
               <p>Goals Dashboard</p>
             </div>
           ) : (
