@@ -22,10 +22,6 @@ const navPages = [
     title: "Ask a question",
     path: "/ask-a-question",
   },
-  {
-    title: "Profile",
-    path: "/profile",
-  },
 ];
 
 const dropdownPages = [
@@ -35,7 +31,7 @@ const dropdownPages = [
   },
   {
     title: "Profile",
-    path: "profile"
+    path: "/profile",
   },
   {
     title: "Settings",
@@ -118,6 +114,7 @@ const Header = () => {
             <div className="flex flex-row items-center">
               <img
                 className="h-6 w-6 rounded-full"
+                alt="profile"
                 src="https://picsum.photos/200"
               />
               <IoMdArrowDropdown fontSize={18} />
@@ -128,7 +125,7 @@ const Header = () => {
         {dropDown && (
           <div className="z-50 absolute top-10 right-10 my-4 text-base list-none bg-white rounded divide-y divide-gray-300 shadow border border-gray-300">
             <div className="py-3 px-4">
-              <span className="block text-sm text-gray-900">{user.name}</span>
+              <span className="block text-sm text-gray-900">{user.username}</span>
               <span className="block text-sm font-medium text-gray-500 truncate">
                 {user.email}
               </span>
@@ -186,66 +183,7 @@ const Header = () => {
           </ul>
         </div>
 
-        {user ? (<DropdownProfileComponent />) : (<LogInRegisterComponent />) }
-
-        {/* Login && Logout button */}
-        {/* <div className="hidden md:flex">
-          <Link to="/login">
-            <button className="border border-1 border-white text-white text-sm font-medium font-sm px-3 py-2 mx-2 rounded-md cursor-pointer hover:border-gray-300 hover:text-gray-300 duration-200">
-              Login
-            </button>
-          </Link>
-          <Link to="/register">
-            <button
-              className="underline border border-1 text-white text-sm font-medium font-sm px-3 py-2 mx-4 rounded-md cursor-pointer hover:border-gray-300 hover:text-gray-300 duration-200"
-              onClick={signOutHandler}
-            >
-              Register
-            </button>
-          </Link>
-        </div> */}
-
-        {/* dropdown profile */}
-        {/* <div className="flex justify-center items-center text-white hover:text-gray-300">
-          <button onClick={() => setDropDown(!dropDown)}>
-            <div className="flex flex-row items-center">
-              <img
-                className="h-6 w-6 rounded-full"
-                src="https://picsum.photos/200"
-              />
-              <IoMdArrowDropdown fontSize={18} />
-            </div>
-          </button>
-        </div>
-
-        {dropDown && (
-          <div className="z-50 absolute top-10 right-10 my-4 text-base list-none bg-white rounded divide-y divide-gray-300 shadow border border-gray-300">
-            <div className="py-3 px-4">
-              <span className="block text-sm text-gray-900">Bonnie Green</span>
-              <span className="block text-sm font-medium text-gray-500 truncate">
-                name@flowbite.com
-              </span>
-            </div>
-            <ul className="py-1">
-              {dropdownPages.map((page, index) => (
-                <DropdownItem key={index} title={page.title} path={page.path} />
-              ))}
-            </ul>
-
-            <ul className="py-1">
-              <Link to="/">
-                <button
-                  onClick={signOutHandler}
-                  className="w-full hover:bg-gray-100"
-                >
-                  <li className="flex justify-start text-sm py-2 px-4 text-gray-700 ">
-                    Sign Out
-                  </li>
-                </button>
-              </Link>
-            </ul>
-          </div>
-        )} */}
+        {user ? <DropdownProfileComponent /> : <LogInRegisterComponent />}
 
         {/* Mobile mode - Hamburger Menu  */}
         {toggleMenu ? (

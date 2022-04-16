@@ -2,12 +2,13 @@ const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema(
   {
-    name: {
+    username: {
       type: String,
       required: [true, "Please add username value"],
       index: {
           unique: true
-      }
+      },
+      unique: true
     },
     email: {
       type: String,
@@ -15,16 +16,17 @@ const userSchema = mongoose.Schema(
       index: {
         unique: true,
       },
+      unique: true,
       lowercase: true,
     },
     password: {
       type: String,
       required: [true, "Please add password"],
     },
-    aboutMe: { type: String },
-    websiteLink: { type: String },
-    twitterLink: { type: String },
-    githubLink: { type: String },
+    aboutMe: { type: String},
+    website: { type: String},
+    twitter: { type: String},
+    github: { type: String},
   },
   {
     timestamps: true,

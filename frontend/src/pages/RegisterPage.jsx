@@ -10,12 +10,12 @@ import Spinner from "../components/Spinner";
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
     email: "",
-    name: "",
+    username: "",
     password: "",
     confirmPassword: "",
   });
 
-  const { email, name, password, confirmPassword } = formData;
+  const { email, username, password, confirmPassword } = formData;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -43,7 +43,7 @@ const RegisterPage = () => {
       toast.error("Passwords do not match");
     } else {
       const userData = {
-        name,
+        username,
         email,
         password,
       };
@@ -89,19 +89,19 @@ const RegisterPage = () => {
           <form className="mt-8 space-y-6" onSubmit={onSubmitHandler}>
             <div className="rounded-md shadow-sm -space-y-px">
               <div>
-                <label htmlFor="name" className="sr-only">
-                  Name
+                <label htmlFor="username" className="sr-only">
+                  Username
                 </label>
                 <input
-                  id="name"
-                  name="name"
+                  id="username"
+                  name="username"
                   type="text"
                   autoComplete="name"
                   required
-                  value={name}
+                  value={username}
                   onChange={onChangeHandler}
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Name"
+                  placeholder="Username"
                 />
               </div>
               <div>
