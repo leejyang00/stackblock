@@ -49,6 +49,27 @@ export const login = createAsyncThunk(
   }
 );
 
+// Update user profile
+export const updateMe = createAsyncThunk(
+  "auth/updateMe",
+  async (userProfile, thunkAPI) => {
+    try {
+      // const token = thunkAPI.getState().auth.user.token;
+      const token = localStorage.getItem('token');
+      return await authService.updateMe(userProfile, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const logout = createAsyncThunk("auth/logout", async () => {
   await authService.logout();
 });
@@ -61,11 +82,12 @@ export const authSlice = createSlice({
       state.isSuccess = false;
       state.isLoading = false;
       state.isError = false;
-      state.message = ''
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
     builder
+      // register
       .addCase(register.pending, (state) => {
         state.isLoading = true;
       })
@@ -80,9 +102,11 @@ export const authSlice = createSlice({
         state.message = action.payload;
         state.user = null;
       })
+      //login
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
       })
+      // login
       .addCase(login.pending, (state) => {
         state.isLoading = true;
       })
@@ -96,6 +120,21 @@ export const authSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
         state.user = null;
+      })
+      // update me
+      .addCase(updateMe.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateMe.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload;
+        localStorage.setItem("user", JSON.stringify(action.payload));
+      })
+      .addCase(updateMe.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });

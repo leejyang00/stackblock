@@ -15,8 +15,8 @@ export const createGoal = createAsyncThunk(
   async (goalData, thunkAPI) => {
     try {
       // from auth state SLICE
-      const token = thunkAPI.getState().auth.user.token;
-
+      // const token = thunkAPI.getState().auth.user.token;
+      const token = localStorage.getItem('token');
       return await goalsService.createGoal(goalData, token);
     } catch (error) {
       const message =
@@ -36,7 +36,8 @@ export const getGoals = createAsyncThunk(
   "goals/getAll",
   async (_, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token;
+      // const token = thunkAPI.getState().auth.user.token;
+      const token = localStorage.getItem('token');
       return await goalsService.getGoals(token);
     } catch (error) {
       const message =
@@ -56,7 +57,9 @@ export const deleteGoal = createAsyncThunk(
   "/goals/delete",
   async (goalId, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token;
+      // const token = thunkAPI.getState().auth.user.token;
+      const token = localStorage.getItem('token');
+
       const response = await goalsService.deleteGoal(goalId, token);
 
       return response.data;

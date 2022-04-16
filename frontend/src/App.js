@@ -3,23 +3,25 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
 import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
-
-import Header from './components/Header';
+import UserProfile from './pages/UserProfile';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import AskQuestion from './pages/AskQuestion';
 
 const App = () => {
+
   return (
     <>
       <Router>
         <div>
-          <Header />
           <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<UserProfile />} />
+            <Route path="ask-a-question" element={<AskQuestion />} />
           </Routes>
-          </div>
+        </div>
       </Router>
       <ToastContainer />
     </>
