@@ -7,9 +7,13 @@ const questionSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
-    question: {
+    title: {
       type: String,
-      required: [true, "Please add a question"],
+      required: [true, "Please add a title"],
+    },
+    body: {
+      type: String,
+      required: [true, "Please add a body"],
     },
     ratings: {
       type: Number,

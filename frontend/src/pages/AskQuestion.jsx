@@ -1,8 +1,121 @@
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Editor } from "@tinymce/tinymce-react";
+import { useNavigate } from "react-router-dom";
+import { passiveSupport } from "passive-events-support/src/utils";
+import { toast } from "react-toastify";
+
+import ReactTagInput from "@pathofdev/react-tag-input";
+import "@pathofdev/react-tag-input/build/index.css";
+
 import Layout from "../components/Layout";
+import { submitQuestion } from "../features/ask-question/questionSlice";
 
 const AskQuestion = () => {
-  const onEditorHandler = () => {};
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  passiveSupport({
+    debug: false,
+    events: ["touchstart", "touchmove", "touchend", "mousewheel"],
+    listeners: [
+      //document
+      {
+        element: "document",
+        event: "touchstart",
+      },
+      {
+        element: "document",
+        event: "touchmove",
+      },
+      {
+        element: "document",
+        event: "mousewheel",
+      },
+      {
+        element: "document",
+        event: "touchend",
+      },
+      // div.tox.tox-tinymce
+      {
+        element: "div.tox.tox-tinymce",
+        event: "touchstart",
+      },
+      {
+        element: "div.tox.tox-tinymce",
+        event: "touchmove",
+      },
+      {
+        element: "div.tox.tox-tinymce",
+        event: "touchend",
+      },
+      {
+        element: "div.tox.tox-silver-sink.tox-tinymce-aux",
+        event: "touchstart",
+      },
+      {
+        element: "div.tox.tox-silver-sink.tox-tinymce-aux",
+        event: "touchmove",
+      },
+      {
+        element: "div.tox.tox-silver-sink.tox-tinymce-aux",
+        event: "touchend",
+      },
+      {
+        element: "div.root",
+        event: "touchstart",
+      },
+      {
+        element: "div.root",
+        event: "touchmove",
+      },
+      {
+        element: "div.root",
+        event: "touchend",
+      },
+    ],
+  });
+
+  const [tags, setTags] = useState([]);
+  const [question, setQuestion] = useState({
+    title: "",
+    body: "",
+  });
+  const { title, body } = question;
+
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+
+    // must have title, body and tags
+    if (title === "" || body === "" || tags.length === 0) {
+      toast.error("Please complete the question form");
+    } else {
+      const questionData = {
+        title,
+        body,
+        tags,
+      };
+
+      // submit question, navigate to question profile page
+      const response = await dispatch(submitQuestion(questionData));
+      console.log(response.payload._id, "response AQ");
+      navigate(`/question/${response.payload._id}`);
+    }
+  };
+
+  const onChangeHandler = (e) => {
+    setQuestion((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const onEditorHandler = (content, editor) => {
+    setQuestion((prevState) => ({
+      ...prevState,
+      body: content,
+    }));
+  };
 
   return (
     <Layout>
@@ -11,28 +124,35 @@ const AskQuestion = () => {
           <h1 className="text-2xl">Ask a question</h1>
         </div>
 
-        <div className="flex justify-center my-5">
+        <div className="flex my-5">
           <div
             id="question-form"
             className="border border-gray-300 flex flex-col p-3 w-9/12 shadow-md rounded-md"
           >
-            {/* title */}
-            <label htmlFor="title" className="font-semibold mb-2 ">
-              Title
-              <p className="text-sm text-gray-600 font-normal">
-                Be specific and imagine you’re asking a question to another
-                person
-              </p>
-            </label>
-            <input
-              title="title"
-              className="border py-2 px-3 text-sm rounded-sm mb-2"
-              placeholder="Enter your title"
-            />
+            <form onSubmit={onSubmitHandler}>
+              {/* title */}
+              <div className="mb-2">
+                <label htmlFor="title" className="font-semibold mb-2 ">
+                  Title
+                  <p className="text-sm text-gray-600 font-normal">
+                    Be specific and imagine you’re asking a question to another
+                    person
+                  </p>
+                </label>
+              </div>
+              <input
+                id="title"
+                name="title"
+                type="text"
+                value={title}
+                required
+                className="border py-2 px-3 text-sm rounded-sm mb-2 w-full"
+                placeholder="Enter your title"
+                onChange={onChangeHandler}
+              />
 
-            {/* body */}
-            <div id="body" className="py-2">
-              <form>
+              {/* body */}
+              <div id="body" className="py-2">
                 <div id="body-label" className="mb-2">
                   <label className="font-semibold">
                     Body
@@ -44,7 +164,7 @@ const AskQuestion = () => {
                 </div>
                 <div id="body-editor">
                   <Editor
-                    value=""
+                    value={body}
                     onEditorChange={onEditorHandler}
                     init={{
                       height: 200,
@@ -56,34 +176,38 @@ const AskQuestion = () => {
                     }}
                   />
                 </div>
-              </form>
-            </div>
-
-            {/* tag */}
-            <div className="mb-3 py-2">
-              <div className="mb-2">
-                <label htmlFor="tag" className="font-semibold">
-                  Tags
-                  <p className="text-sm text-gray-600 font-normal">
-                    Add up to 5 tags to describe what your question is about
-                  </p>
-                </label>
               </div>
-              <input
-                id="tag"
-                placeholder="add your tags related to your question"
-                className="py-2 px-3 border rounded-sm text-sm w-full"
-              />
-            </div>
 
-            <div className="py-5">
-              <button
-                type="submit"
-                className="py-2 px-3 bg-blue-500 text-white rounded-sm text-sm hover:bg-blue-600 duration-200"
-              >
-                Submit question
-              </button>
-            </div>
+              {/* tag */}
+              <div className="mb-3 py-2">
+                <div className="mb-2">
+                  <label htmlFor="tag" className="font-semibold">
+                    Tags
+                    <p className="text-sm text-gray-600 font-normal">
+                      Add up to 5 tags to describe what your question is about
+                    </p>
+                  </label>
+                </div>
+                <ReactTagInput
+                  tags={tags}
+                  placeholder="Type and press enter"
+                  maxTags={3}
+                  editable={true}
+                  readOnly={false}
+                  removeOnBackspace={true}
+                  onChange={(newTags) => setTags(newTags)}
+                />
+              </div>
+
+              <div className="py-5">
+                <button
+                  type="submit"
+                  className="py-2 px-3 bg-blue-500 text-white rounded-sm text-sm hover:bg-blue-600 duration-200"
+                >
+                  Submit question
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
