@@ -5,7 +5,7 @@ import {
   AiOutlineLink,
   AiFillTwitterCircle,
 } from "react-icons/ai";
-var parse = require("html-react-parser");
+import parse from 'html-react-parser';
 
 const SectionBlank = ({ section, setEditProfile }) => {
   return (

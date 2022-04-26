@@ -11,31 +11,8 @@ import {
 
 import AboutMe from "../components/Profile/About";
 import EditProfile from "../components/Profile/EditProfile";
-
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
-const days = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
+import Months from "../components/Common/Months";
+import Days from "../components/Common/Days";
 
 const UserProfile = () => {
   const navigate = useNavigate();
@@ -75,8 +52,8 @@ const UserProfile = () => {
             <div className="mt-3">
               <h1 className="md:text-3xl text-lg">{user.username}</h1>
               <p className="text-gray-500 text-sm mt-1">
-                Joined on {date.getDate()} {months[date.getMonth()]}{" "}
-                {date.getFullYear()}, {days[date.getDay()]}
+                Joined on {date.getDate()} {Months[date.getMonth()]}{" "}
+                {date.getFullYear()}, {Days[date.getDay()]}
               </p>
               <div className="flex flex-row py-3">
                 {website && (

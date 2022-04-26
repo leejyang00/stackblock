@@ -7,6 +7,7 @@ import UserProfile from './pages/UserProfile';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AskQuestion from './pages/AskQuestion';
+import QuestionProfile from './components/Question/questionProfile';
 
 const App = () => {
 
@@ -19,7 +20,8 @@ const App = () => {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<UserProfile />} />
-            <Route path="ask-a-question" element={<AskQuestion />} />
+            <Route path="/ask-a-question" element={<AskQuestion />} />
+            <Route path="/question/:questionID" element={<QuestionProfile />} />
           </Routes>
         </div>
       </Router>

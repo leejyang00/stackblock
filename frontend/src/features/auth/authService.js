@@ -53,11 +53,18 @@ const updateMe = async (userProfile, token) => {
   return response.data;
 };
 
+// getting username for the question/answer
+const getUsername = async(userId) => {
+  const response = await axios.get(API_URL + userId)
+  return response.data
+}
+
 const authService = {
   register,
   logout,
   login,
   updateMe,
+  getUsername
 };
 
 export default authService;

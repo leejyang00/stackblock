@@ -81,12 +81,25 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc     get user data
+// @desc     get user's personal data
 // @route    GET /api/users/me
 // @access   Private
 const getMe = asyncHandler(async (req, res) => {
   res.status(200).json(req.user);
 });
+
+// @desc    get user data, for question and answer profile
+// @route   GET /api/users/:userId
+// @access  Public
+const getUser = asyncHandler(async (req, res) => {
+
+  const user = await User.findById(req.params.userId)
+
+  res.status(200).json({
+    _id: user.id,
+    username: user.username,
+  })
+})
 
 // @desc     Update user profile details from 'EDIT PROFILE'
 // @route    PUT /api/users
@@ -111,5 +124,6 @@ module.exports = {
   registerUser,
   loginUser,
   getMe,
+  getUser, 
   updateMe,
 };
