@@ -2,33 +2,42 @@ const asyncHandler = require("express-async-handler");
 
 const Question = require("../models/questionModel");
 
-// @desc    Get questions
+// @desc    Get all questions submitted by user
 // @route   GET /api/questions
 // @access  Public
-const getQuestions = asyncHandler( async (req, res) => {
+const getUserQuestions = asyncHandler(async (req, res) => {
+  const questions = await Question.find({ user: req.user.id });
 
-  const questions = await Question.find()
+  res.status(200).json(questions);
 
-  res.status(200).json(questions)
-})
+});
 
-// @desc    Upload a new question
+// @desc    Get specific question with questionID as URL params
+// @route   GET /api/questions/:questionID
+// @access  Private
+const getQuestion = asyncHandler(async (req, res) => {
+
+  const question = await Question.findById(req.params.questionID);
+
+  res.status(200).json(question);
+});
+
+// @desc    Submit a new question
 // @route   POST /api/questions
 // @access  Private
-const uploadQuestion = asyncHandler(async (req, res) => {
-  const { question, tags } = req.body;
+const submitQuestion = asyncHandler(async (req, res) => {
+  const { title, body, tags } = req.body;
 
-  if (!question) {
+  if (!body || !title) {
     res.status(400);
-    throw new Error("Please add a question");
+    throw new Error("Please add a title or body");
   }
 
-  // HANDLE TAGS, SHOULD BE ACCEPTED AS ARRAY, AND ABLE TO PUSH
-  // console.log(tags)
-
   const questionAsked = await Question.create({
-    question: req.body.question,
     user: req.user.id,
+    title: title,
+    body: body,
+    tags: tags,
   });
 
   if (questionAsked) {
@@ -57,21 +66,21 @@ const deleteQuestion = asyncHandler(async (req, res) => {
   }
 
   if (questions.user.id !== req.user.id) {
-    res.status(401)
-    throw new Error('User not authorized')
+    res.status(401);
+    throw new Error("User not authorized");
   }
 
-  await question.remove()
+  await question.remove();
 
   res.status(200).json({
     questionID: req.params.id,
-    question: question
-  })
-
+    question: question,
+  });
 });
 
 module.exports = {
-  getQuestions,
-  uploadQuestion,
-  deleteQuestion
+  getUserQuestions,
+  getQuestion,
+  submitQuestion,
+  deleteQuestion,
 };
