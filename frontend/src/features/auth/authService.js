@@ -54,7 +54,7 @@ const updateMe = async (userProfile, token) => {
 };
 
 // getting username for the question/answer
-const getUsername = async(userId) => {
+const getUser = async(userId) => {
   const response = await axios.get(API_URL + userId)
   return response.data
 }
@@ -64,7 +64,7 @@ const authService = {
   logout,
   login,
   updateMe,
-  getUsername
+  getUser
 };
 
 export default authService;

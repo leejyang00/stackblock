@@ -91,10 +91,11 @@ const questionSlice = createSlice({
       .addCase(getAllQuestions.fulfilled, (state, action) => {
         state.isSuccess = true;
         state.isLoading = false;
-        console.log(action.payload, 'payload')
+        // console.log(action.payload, 'payload')
         // settle to give one question each time
-
-        state.questions.push(action.payload)
+        action.payload.map((question) => (
+          state.questions.push(question)
+        ))
       })
       .addCase(getAllQuestions.rejected, (state, action) => {
         state.isError = true

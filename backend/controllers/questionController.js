@@ -44,6 +44,7 @@ const submitQuestion = asyncHandler(async (req, res) => {
 
   const questionAsked = await Question.create({
     user: req.user.id,
+    username: req.user.username,
     title: title,
     body: body,
     tags: tags,

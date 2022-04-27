@@ -1,30 +1,36 @@
-import { useSelector } from "react-redux";
 import {
   AiOutlineMail,
   AiOutlineGithub,
   AiOutlineLink,
   AiFillTwitterCircle,
 } from "react-icons/ai";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
-const SectionBlank = ({ section, setEditProfile }) => {
+const SectionBlank = ({ isLocalUser, section, setEditProfile }) => {
   return (
     <div className="h-32 border border-gray-300 bg-gray-100 rounded-md flex justify-center items-center text-center p-10">
-      <p className="text-sm mx-auto max-w-xs text-gray-600">
-        Your {section} section is currently blank. Would you like to add one?{" "}
-        <button onClick={() => setEditProfile(true)} className="text-blue-500 hover:text-blue-400 duration-200">
-          Edit profile
-        </button>
-        {/* <a href="#" className="text-blue-500 hover:text-blue-400 duration-200">
-          Edit profile
-        </a> */}
-      </p>
+      {isLocalUser ? (
+        <p className="text-sm mx-auto max-w-xs text-gray-600">
+          Your {section} section is currently blank. Would you like to add one?{" "}
+          <button
+            onClick={() => setEditProfile(true)}
+            className="text-blue-500 hover:text-blue-400 duration-200"
+          >
+            Edit profile
+          </button>
+        </p>
+      ) : (
+        <p className="text-sm mx-auto max-w-xs text-gray-600">
+          User's {section} section is currently blank.
+        </p>
+      )}
     </div>
   );
 };
 
-const AboutMe = ({ editProfile}) => {
-  const { user } = useSelector((state) => state.auth);
+const AboutMe = ({ editProfile, user }) => {
+
+  const localUser = JSON.parse(localStorage.getItem("user"));
 
   return (
     <>
@@ -48,7 +54,11 @@ const AboutMe = ({ editProfile}) => {
             </>
           ) : (
             <>
-              <SectionBlank section="about me" setEditProfile={editProfile}/>
+              <SectionBlank
+                isLocalUser={localUser._id === user._id}
+                section="about me"
+                setEditProfile={editProfile}
+              />
               <div className="py-5 block">
                 <div className="w-full border-t border-gray-300"></div>
               </div>
@@ -67,7 +77,11 @@ const AboutMe = ({ editProfile}) => {
               </p>
             </div>
           ) : (
-            <SectionBlank section="email" setEditProfile={editProfile}/>
+            <SectionBlank
+              isLocalUser={localUser._id === user._id}
+              section="email"
+              setEditProfile={editProfile}
+            />
           )}
         </div>
 
@@ -81,7 +95,11 @@ const AboutMe = ({ editProfile}) => {
               </p>
             </div>
           ) : (
-            <SectionBlank section="website" setEditProfile={editProfile}/>
+            <SectionBlank
+              isLocalUser={localUser._id === user._id}
+              section="website"
+              setEditProfile={editProfile}
+            />
           )}
         </div>
 
@@ -95,7 +113,11 @@ const AboutMe = ({ editProfile}) => {
               </p>
             </div>
           ) : (
-            <SectionBlank section="twitter" setEditProfile={editProfile}/>
+            <SectionBlank
+              isLocalUser={localUser._id === user._id}
+              section="twitter"
+              setEditProfile={editProfile}
+            />
           )}
         </div>
 
@@ -109,7 +131,11 @@ const AboutMe = ({ editProfile}) => {
               </p>
             </div>
           ) : (
-            <SectionBlank section="github" setEditProfile={editProfile}/>
+            <SectionBlank
+              isLocalUser={localUser._id === user._id}
+              section="github"
+              setEditProfile={editProfile}
+            />
           )}
         </div>
       </div>
