@@ -93,7 +93,7 @@ const QuestionProfile = () => {
     const fetchQuestionAndAnswer = async () => {
       const questionData = await questionService.getQuestion(questionID);
       const answersData = await answerService.getAllAnswers(questionID);
-      const questionUsernameData = await authService.getUsername(
+      const questionUsernameData = await authService.getUser(
         questionData.user
       );
       setData(questionData);
@@ -135,7 +135,7 @@ const QuestionProfile = () => {
 
       if (response) {
         window.location.reload(true);
-        console.log("SUCCESS");
+        // console.log("SUCCESS");
       } else {
         throw new Error("Unable to submit answer from QuestionProfile");
       }

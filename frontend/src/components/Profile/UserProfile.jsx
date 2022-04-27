@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Layout from "../components/Layout";
+import Layout from "../Layout";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -9,19 +9,19 @@ import {
   AiFillEdit,
 } from "react-icons/ai";
 
-import AboutMe from "../components/Profile/About";
-import EditProfile from "../components/Profile/EditProfile";
-import Months from "../components/Common/Months";
-import Days from "../components/Common/Days";
+import AboutMe from "./About";
+import EditProfile from "./EditProfile";
+import Months from "../Common/Months";
+import Days from "../Common/Days";
 
 const UserProfile = () => {
-  const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
-  const date = new Date(user.createdAt);
 
+  const navigate = useNavigate();
   // temporary
   const [editProfile, setEditProfile] = useState(false);
 
+  const { user } = useSelector((state) => state.auth);
+  const date = new Date(user.createdAt);
   const { website, twitter, github } = user;
 
   useEffect(() => {
@@ -83,18 +83,21 @@ const UserProfile = () => {
           {/* right section */}
           {/* change this to absolute to the right corner, rather than div justify-between */}
           <div className="whitespace-normal md:w-2/12 w-8/12 flex md:justify-end items-start ">
-            {!editProfile ? (<button
-              className="bg-white border border-gray-400 text-xs py-2 px-3 flex justify-center items-center hover:bg-gray-100 duration-200"
-              onClick={() => setEditProfile(true)}
-            >
-              <AiFillEdit className="mr-1" /> Edit Profile
-            </button>) : (<button
-              className="bg-white border border-gray-400 text-xs py-2 px-3 flex justify-center items-center hover:bg-gray-100 duration-200"
-              onClick={() => setEditProfile(false)}
-            >
-              Return to Profile
-            </button>)}
-            
+            {!editProfile ? (
+              <button
+                className="bg-white border border-gray-400 text-xs py-2 px-3 flex justify-center items-center hover:bg-gray-100 duration-200"
+                onClick={() => setEditProfile(true)}
+              >
+                <AiFillEdit className="mr-1" /> Edit Profile
+              </button>
+            ) : (
+              <button
+                className="bg-white border border-gray-400 text-xs py-2 px-3 flex justify-center items-center hover:bg-gray-100 duration-200"
+                onClick={() => setEditProfile(false)}
+              >
+                Return to Profile
+              </button>
+            )}
           </div>
         </div>
 
@@ -107,18 +110,22 @@ const UserProfile = () => {
             <button className="mr-1 rounded-full px-3 py-1 text-sm hover:bg-gray-200">
               Questions
             </button>
-            <button className="mr-1 rounded-full px-3 py-1 text-sm hover:bg-gray-200">
+            {/* <button className="mr-1 rounded-full px-3 py-1 text-sm hover:bg-gray-200">
               Answers
             </button>
             <button className="mr-1 rounded-full px-3 py-1 text-sm hover:bg-gray-200">
               Tags
-            </button>
+            </button> */}
           </div>
         </div>
 
         {/* sub-content for profile page, [Profile, Questions, Tags, Edit Profile] */}
         <div className="md:px-20 md:py-3 py-2 px-4 container mx-auto flex justify-center items-center">
-          {!editProfile ? <AboutMe editProfile={setEditProfile}/> : <EditProfile editProfile={setEditProfile}/>}
+          {!editProfile ? (
+            <AboutMe editProfile={setEditProfile} user={user}/>
+          ) : (
+            <EditProfile editProfile={setEditProfile} />
+          )}
         </div>
       </div>
     </Layout>

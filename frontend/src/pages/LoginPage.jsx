@@ -160,7 +160,7 @@ const LoginPage = () => {
             <button
               disabled
               type="button"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-indigo-600 bg-white border border-gray-200"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-indigo-600 bg-white border-gray-200"
             >
               <svg
                 role="status"
