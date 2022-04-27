@@ -12,6 +12,15 @@ const getUserQuestions = asyncHandler(async (req, res) => {
 
 });
 
+// @desc    Get ALL questions, should be the first 10, pagination next 10
+// @route   GET /api/questions/all
+// @access  Public
+const getAllQuestions = asyncHandler(async (req, res) => {
+  const questions = await Question.find({}).sort({createdAt: -1});
+
+  res.status(200).json(questions)
+})
+
 // @desc    Get specific question with questionID as URL params
 // @route   GET /api/questions/:questionID
 // @access  Private
@@ -80,6 +89,7 @@ const deleteQuestion = asyncHandler(async (req, res) => {
 
 module.exports = {
   getUserQuestions,
+  getAllQuestions, 
   getQuestion,
   submitQuestion,
   deleteQuestion,

@@ -135,7 +135,7 @@ const QuestionProfile = () => {
 
       if (response) {
         window.location.reload(true);
-        console.log("SUCCESS");
+        // console.log("SUCCESS");
       } else {
         throw new Error("Unable to submit answer from QuestionProfile");
       }

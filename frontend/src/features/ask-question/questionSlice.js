@@ -46,11 +46,13 @@ export const submitQuestion = createAsyncThunk(
   }
 );
 
-export const getQuestion = createAsyncThunk(
-  "/question/getQuestion",
-  async (questionData, thunkAPI) => {
+// retrieve ALL questions asked 
+// - perhaps the first 10 questions
+export const getAllQuestions = createAsyncThunk(
+  "/question/getAllQuestions",
+  async (_, thunkAPI) => {
     try {
-      return await questionService.getQuestion(questionData);
+      return await questionService.getAllQuestions();
     } catch (e) {
       const message =
         (e.response && e.response.data && e.response.data.message) ||
@@ -77,12 +79,27 @@ const questionSlice = createSlice({
       .addCase(submitQuestion.fulfilled, (state, action) => {
         state.isSuccess = true;
         state.isLoading = false;
-        state.questions.push(action.payload);
+        // state.questions.push(action.payload);
       })
       .addCase(submitQuestion.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
-      });
+      })
+      .addCase(getAllQuestions.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllQuestions.fulfilled, (state, action) => {
+        state.isSuccess = true;
+        state.isLoading = false;
+        console.log(action.payload, 'payload')
+        // settle to give one question each time
+
+        state.questions.push(action.payload)
+      })
+      .addCase(getAllQuestions.rejected, (state, action) => {
+        state.isError = true
+        state.message = action.payload
+      })
   },
 });
 
