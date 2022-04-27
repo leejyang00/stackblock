@@ -1,4 +1,4 @@
-import {StrictMode} from 'react';
+// import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 
 import './index.css';
@@ -12,13 +12,13 @@ import * as serviceWorker from './serviceWorker';
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
 
+// <StrictMode>
 root.render(
-  <StrictMode>
     <Provider store={store}>
       <App />
-    </Provider>
-  </StrictMode>,
+    </Provider>,
 );
+// </StrictMode>,
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

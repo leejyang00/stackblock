@@ -24,6 +24,12 @@ const getUserQuestion = async (token) => {
   return response.data
 }
 
+// get all questions for home page
+const getAllQuestions = async () => {
+  const response = await axios.get(API_URL + "all")
+  return response.data
+}
+
 // getting specific question with questionID from URL parameter
 const getQuestion = async(questionId) => {
   const response = await axios.get(API_URL + questionId);
@@ -33,7 +39,8 @@ const getQuestion = async(questionId) => {
 const questionService = {
   submitQuestion,
   getUserQuestion,
-  getQuestion
+  getQuestion,
+  getAllQuestions
 };
 
 export default questionService;

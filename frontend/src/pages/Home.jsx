@@ -1,75 +1,57 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import Spinner from "../components/Spinner";
-import { reset } from "../features/goals/goalsSlice";
-import { toast } from "react-toastify";
 
-import GoalForm from "../components/GoalForm";
-import GoalItem from "../components/GoalItem";
 import Layout from "../components/Layout";
+import { useSelector, useDispatch } from "react-redux";
+import { getAllQuestions, reset } from "../features/ask-question/questionSlice";
+
+import { Link } from "react-router-dom";
+import QuestionList from "../components/Question/questionList";
 
 const Home = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
-  const { goals, isLoading, isError, message } = useSelector(
-    (state) => state.goals
-  );
+  const { questions } = useSelector((state) => state.questions);
 
   useEffect(() => {
-    if (isError) {
-      console.log(message);
-      toast.error(message);
-    }
-
-    // if (!user) {
-    //   navigate("/login");
-    // }
-    
-    // {user && dispatch(getGoals())};
+    dispatch(getAllQuestions());
 
     return () => {
-      dispatch(reset());
-    };
-  }, [user, navigate, isError, message, dispatch]);
-
-  if (isLoading) {
-    return <Spinner />;
-  }
+      dispatch(reset())
+    }
+  }, [dispatch]);
 
   return (
     <Layout>
-      <div className="w-full flex justify-center item-center flex-col ">
-        <div className="flex flex-col justify-center items-center">
-          {user ? (
-            <div>
-              <h1 className="text-3xl">Welcome {user && user.username}</h1>
-              <p>Goals Dashboard</p>
-            </div>
-          ) : (
-            <div>
-              <h1 className="text-3xl">Welcome</h1>
-              <p>Create an account to ask a question</p>
-            </div>
-          )}
+      <header className="w-full bg-blue-100">
+        <div className="min-w-11/12 lg:mx-auto mx-2 container h-16 flex justify-start items-center">
+          <span className="font-bold text-2xl text-blue-800">Ethereum</span>
+        </div>
+      </header>
+      <div className=" lg:max-w-5xl md:max-w-3xl flex-col justify-center items-center mb-8 md:p-16 py-10 px-5 container mx-auto">
+        <div
+          id="question-header"
+          className="flex flex-row justify-between mb-6"
+        >
+          <h2 className="md:text-3xl text-xl mr-5">All Questions</h2>
+          <div className="flex justify-start items-start">
+            <Link to="/ask-a-question">
+              <button className="text-sm whitespace-nowrap mb-3 py-2 px-3 bg-blue-700 hover:bg-blue-600 border border-blue-300 duration-200 text-white rounded-sm font-semibold">
+                Ask Question
+              </button>
+            </Link>
+          </div>
         </div>
 
-        <div>
-          <GoalForm />
+        <div>2,300 questions</div>
+
+        <div id="divider" className="py-3 block">
+          <div className="w-full border-t border-gray-300"></div>
         </div>
 
-        <div>
-          {goals.length > 0 ? (
-            <div>
-              {goals.map((goal) => (
-                <GoalItem key={goal._id} goal={goal} />
-              ))}
-            </div>
-          ) : (
-            <h3>You have not set any goals</h3>
-          )}
-        </div>
+        {/* loop though each question */}
+        {questions.map((question, index) => (
+          <QuestionList key={index} question={question} />
+        ))}
+        {/* end */}
       </div>
     </Layout>
   );
