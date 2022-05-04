@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { register, reset } from "../features/auth/authSlice";
 import Spinner from "../components/Spinner";
+import PasswordStrength from "../components/Common/PasswordStrength/PasswordStrength";
+import zxcvbn from "zxcvbn";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -41,15 +43,22 @@ const RegisterPage = () => {
 
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
-    } else {
-      const userData = {
-        username,
-        email,
-        password,
-      };
-      // in authSlice Redux, then post data to URI
-      dispatch(register(userData));
+      return
     }
+    // check password strength
+    if (zxcvbn(password).score <= 2) {
+      toast.error("Password is too weak");
+      return
+    }
+
+    const userData = {
+      username,
+      email,
+      password,
+    };
+
+    // in authSlice Redux, then post data to URI
+    dispatch(register(userData));
   };
 
   const onChangeHandler = (e) => {
@@ -73,6 +82,7 @@ const RegisterPage = () => {
               src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
               alt="Workflow"
             />
+            <h1 className="font-bold text-center my-3">Stackblock</h1>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
               Register a new account
             </h2>
@@ -87,9 +97,9 @@ const RegisterPage = () => {
             </p>
           </div>
           <form className="mt-8 space-y-6" onSubmit={onSubmitHandler}>
-            <div className="rounded-md shadow-sm -space-y-px">
-              <div>
-                <label htmlFor="username" className="sr-only">
+            <div className="rounded-md shadow-sm">
+              <div className="mb-2">
+                <label htmlFor="username" className="text-sm">
                   Username
                 </label>
                 <input
@@ -100,12 +110,12 @@ const RegisterPage = () => {
                   required
                   value={username}
                   onChange={onChangeHandler}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Username"
+                  className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="Enter your username"
                 />
               </div>
-              <div>
-                <label htmlFor="email-address" className="sr-only">
+              <div className="mb-2">
+                <label htmlFor="email-address" className="text-sm">
                   Email address
                 </label>
                 <input
@@ -116,12 +126,12 @@ const RegisterPage = () => {
                   required
                   value={email}
                   onChange={onChangeHandler}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Email address"
+                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="Enter your email address"
                 />
               </div>
-              <div>
-                <label htmlFor="password" className="sr-only">
+              <div className="mb-2">
+                <label htmlFor="password" className="text-sm">
                   Password
                 </label>
                 <input
@@ -132,12 +142,16 @@ const RegisterPage = () => {
                   required
                   value={password}
                   onChange={onChangeHandler}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Password"
+                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="Enter your password"
                 />
               </div>
-              <div>
-                <label htmlFor="confirmPassword" className="sr-only">
+
+              {/* password strength meter */}
+              <PasswordStrength password={password} />
+
+              <div className="mb-2">
+                <label htmlFor="confirmPassword" className="text-sm">
                   Confirm Password
                 </label>
                 <input
@@ -148,8 +162,8 @@ const RegisterPage = () => {
                   required
                   value={confirmPassword}
                   onChange={onChangeHandler}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Confirm Password"
+                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="Enter your confirm password"
                 />
               </div>
             </div>
