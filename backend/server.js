@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require('path')
 const dotenv = require("dotenv").config();
 const colors = require("colors");
 const { errorHandler } = require("./middleware/errorMiddleware");
@@ -11,6 +12,13 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+// console.log(path.join(__dirname, 'frontend', 'build'))
+
+app.get('/', function(req, res) {
+  res.send('hello world');
+});
 
 app.use("/api/goals", require("./routes/goalRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));

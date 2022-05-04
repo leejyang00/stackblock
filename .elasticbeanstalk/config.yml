@@ -1,0 +1,5 @@
+branch-defaults:
+  main:
+    environment: Stackblock1-env
+global:
+  profile: eb-cli
