@@ -2,15 +2,15 @@ import parse from "html-react-parser";
 import { Link } from "react-router-dom";
 import Months from "../Common/Months";
 
-const QuestionList = ({ question }) => {
-  const { _id, user, username, title, body, ratings, createdAt, tags } = question;
+const QuestionList = (props) => {
+  const { id, question, onSelect } = props;
+  const { _id, user, username, title, body, ratings, createdAt, tags } =
+    question;
   const date = new Date(createdAt);
-
-  // console.log(parse(body))
 
   return (
     <>
-      <div className="flex flex-col">
+      <div id={id} className="flex flex-col">
         <div
           id="post-summary"
           className="mb-1 flex flex-row justify-start items-center space-x-2 text-sm "
@@ -25,7 +25,9 @@ const QuestionList = ({ question }) => {
         </div>
         <div id="post-title" className="mb-1">
           <h3 className="text-xl text-blue-700 hover:text-blue-500 hover:cursor-pointer duration-100 ">
-            <Link to={`/question/${_id}`}>{title}</Link>
+            <Link to={`/question/${_id}`} onClick={() => onSelect(id)}>
+              {title}
+            </Link>
           </h3>
         </div>
         <div id="post-body" className="mb-2">
@@ -47,10 +49,7 @@ const QuestionList = ({ question }) => {
 
         <div id="post-user" className="mb-3 text-xs">
           <span className="text-blue-600 hover:cursor-pointer hover:text-blue-500 duration-100">
-            <Link to={`/user/${user}`}>
-              {username}
-            </Link>
-            
+            <Link to={`/user/${user}`}>{username}</Link>
           </span>{" "}
           <span className="text-slate-500">
             asked {Months[date.getMonth()]} {date.getDate()},{" "}

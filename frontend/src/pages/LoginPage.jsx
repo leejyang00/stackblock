@@ -7,14 +7,21 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { login, reset } from "../features/auth/authSlice";
 import Spinner from "../components/Spinner";
+// import { useCookies } from "react-cookie";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    rememberMe: false,
   });
 
-  const { email, password } = formData;
+  const { email, password, rememberMe } = formData;
+
+  // const [cookies, setCookie, removeCookie] = useCookies(
+  //   ["testing"],
+  //   ["proper"]
+  // );
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -35,10 +42,17 @@ const LoginPage = () => {
 
   // form input change handler
   const onChangeHandler = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+    if (e.target.name === "rememberMe") {
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.target.name]: !prevState.rememberMe,
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.target.name]: e.target.value,
+      }));
+    }
   };
 
   // login form submit
@@ -49,6 +63,8 @@ const LoginPage = () => {
       email,
       password,
     };
+
+    // setCookie("testing", true, { path: "/" });
 
     dispatch(login(userData));
   };
@@ -69,6 +85,8 @@ const LoginPage = () => {
               src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
               alt="Workflow"
             />
+            <h1 className="font-bold text-center my-3">Stackblock</h1>
+
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
               Sign in to your account
             </h2>
@@ -121,10 +139,11 @@ const LoginPage = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <input
-                  id="remember-me"
-                  name="remember-me"
+                  id="rememberMe"
+                  name="rememberMe"
                   type="checkbox"
                   className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  onChange={onChangeHandler}
                 />
                 <label
                   htmlFor="remember-me"
