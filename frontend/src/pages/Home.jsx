@@ -3,21 +3,38 @@ import { useEffect } from "react";
 import Layout from "../components/Layout";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllQuestions, reset } from "../features/ask-question/questionSlice";
+// import { useCookies } from "react-cookie";
 
 import { Link } from "react-router-dom";
 import QuestionList from "../components/Question/questionList";
 
+const SESS_POS_QUES = "scroll-position-question";
+
 const Home = () => {
   const dispatch = useDispatch();
-  const { questions } = useSelector((state) => state.questions);
+  const { questions } = useSelector((state) => state.questions); // isSuccess
 
   useEffect(() => {
     dispatch(getAllQuestions());
 
+    setTimeout(() => {
+      if (sessionStorage.getItem(SESS_POS_QUES)) {
+        const questionId = sessionStorage.getItem(SESS_POS_QUES);
+        const element = document?.getElementById(questionId);
+        element.scrollIntoView({ behavior: "auto", block: "nearest" });
+        sessionStorage.removeItem(SESS_POS_QUES);
+      }
+    }, 300);
+
     return () => {
-      dispatch(reset())
-    }
+      dispatch(reset());
+    };
   }, [dispatch]);
+
+  // store prev scroll position
+  const maintainScrollPosition = (id) => {
+    sessionStorage.setItem(SESS_POS_QUES, id);
+  };
 
   return (
     <Layout>
@@ -41,6 +58,7 @@ const Home = () => {
           </div>
         </div>
 
+        {/* get actual number of questions */}
         <div>2,300 questions</div>
 
         <div id="divider" className="py-3 block">
@@ -48,8 +66,13 @@ const Home = () => {
         </div>
 
         {/* loop though each question */}
-        {questions.map((question, index) => (
-          <QuestionList key={index} question={question} />
+        {questions.map((question, i) => (
+          <QuestionList
+            key={i}
+            id={`question-${i}`}
+            question={question}
+            onSelect={maintainScrollPosition}
+          />
         ))}
         {/* end */}
       </div>

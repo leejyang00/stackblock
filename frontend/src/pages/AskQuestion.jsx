@@ -4,12 +4,16 @@ import { Editor } from "@tinymce/tinymce-react";
 import { useNavigate } from "react-router-dom";
 import { passiveSupport } from "passive-events-support/src/utils";
 import { toast } from "react-toastify";
+import { BiImageAdd } from "react-icons/bi";
 
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
+import { FileUploader } from "react-drag-drop-files";
 
 import Layout from "../components/Layout";
 import { submitQuestion } from "../features/ask-question/questionSlice";
+
+const fileTypes = ["JPG", "PNG"];
 
 const AskQuestion = () => {
   const dispatch = useDispatch();
@@ -77,6 +81,7 @@ const AskQuestion = () => {
   });
 
   const [tags, setTags] = useState([]);
+  const [images, setImages] = useState([]);
   const [question, setQuestion] = useState({
     title: "",
     body: "",
@@ -103,6 +108,14 @@ const AskQuestion = () => {
     }
   };
 
+  const handleUpload = (files) => {
+    // console.log(Object.values(files), "file");
+
+    Object.values(files).map((file) => (
+      setImages((prevState) => [...prevState, file])
+    ))
+  };
+
   const onChangeHandler = (e) => {
     setQuestion((prevState) => ({
       ...prevState,
@@ -119,7 +132,7 @@ const AskQuestion = () => {
 
   return (
     <Layout>
-      <div className="w-full flex flex-col justify-items-center container mx-auto px-10 py-5 ">
+      <div className="w-full flex flex-col justify-items-center container mx-auto px-10 py-5">
         <div className="py-5">
           <h1 className="text-2xl">Ask a question</h1>
         </div>
@@ -184,7 +197,7 @@ const AskQuestion = () => {
                   <label htmlFor="tag" className="font-semibold">
                     Tags
                     <p className="text-sm text-gray-600 font-normal">
-                      Add up to 5 tags to describe what your question is about
+                      Add up to 3 tags to describe what your question is about
                     </p>
                   </label>
                 </div>
@@ -197,6 +210,34 @@ const AskQuestion = () => {
                   removeOnBackspace={true}
                   onChange={(newTags) => setTags(newTags)}
                 />
+              </div>
+
+              <div>
+                <div className="mb-2">
+                  <label htmlFor="tag" className="font-semibold">
+                    Images
+                    <p className="text-sm text-gray-600 font-normal">
+                      Include any images for your question (only PNG, JPG accepted)
+                    </p>
+                  </label>
+                </div>
+                <FileUploader
+                  handleChange={handleUpload}
+                  name="files"
+                  types={fileTypes}
+                  multiple
+                >
+                  <div className="border-dotted border-2 border-sky-500 py-2 px-3 bg-gray-100 hover:cursor-pointer flex flex-row items-center">
+                    <BiImageAdd size={20} className="text-gray-500 mr-2" />{" "}
+                    <span className="text-sm">Upload image files here ...</span>
+                  </div>
+                </FileUploader>
+                <div className="flex flex-col space-y-2 my-2">
+                  {images &&
+                    images.map((image, index) => (
+                      <p key={index} className="text-sm">{image.name}</p>
+                    ))}
+                </div>
               </div>
 
               <div className="py-5">
