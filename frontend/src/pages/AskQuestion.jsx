@@ -103,7 +103,7 @@ const AskQuestion = () => {
 
       // submit question, navigate to question profile page
       const response = await dispatch(submitQuestion(questionData));
-      console.log(response.payload._id, "response AQ");
+      // console.log(response.payload._id, "response AQ");
       navigate(`/question/${response.payload._id}`);
     }
   };

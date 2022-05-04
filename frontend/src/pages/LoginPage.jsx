@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { login, reset } from "../features/auth/authSlice";
 import Spinner from "../components/Spinner";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -18,10 +18,10 @@ const LoginPage = () => {
 
   const { email, password, rememberMe } = formData;
 
-  const [cookies, setCookie, removeCookie] = useCookies(
-    ["testing"],
-    ["proper"]
-  );
+  // const [cookies, setCookie, removeCookie] = useCookies(
+  //   ["testing"],
+  //   ["proper"]
+  // );
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -64,7 +64,7 @@ const LoginPage = () => {
       password,
     };
 
-    setCookie("testing", true, { path: "/" });
+    // setCookie("testing", true, { path: "/" });
 
     dispatch(login(userData));
   };
