@@ -1,22 +1,25 @@
 // import {StrictMode} from 'react';
-import {createRoot} from 'react-dom/client';
+import { createRoot } from "react-dom/client";
+import { CookiesProvider } from "react-cookie";
 
-import './index.css';
-import App from './App';
-import { store } from './app/store';
-import { Provider } from 'react-redux';
-import * as serviceWorker from './serviceWorker';
+import "./index.css";
+import App from "./App";
+import { store } from "./app/store";
+import { Provider } from "react-redux";
+import * as serviceWorker from "./serviceWorker";
 
 // 👇️ IMPORTANT: use correct ID of your root element
 // this is the ID of the div in your index.html file
-const rootElement = document.getElementById('root');
+const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 
 // <StrictMode>
 root.render(
+  <CookiesProvider>
     <Provider store={store}>
       <App />
-    </Provider>,
+    </Provider>
+  </CookiesProvider>,
 );
 // </StrictMode>,
 
