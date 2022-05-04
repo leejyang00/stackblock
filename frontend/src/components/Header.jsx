@@ -26,7 +26,7 @@ const navPages = [
 
 const dropdownPages = [
   {
-    title: "Dashboard",
+    title: "Home",
     path: "/",
   },
   {
