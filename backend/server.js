@@ -13,12 +13,17 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(express.static(path.join(__dirname, '../frontend/build')));
-// console.log(path.join(__dirname, 'frontend', 'build'))
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/build")));
+} else {
+  app.get("/", (req, res) => res.send("Development mode"));
+}
 
-app.get('/', function(req, res) {
-  res.send('hello world');
-});
+// app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+// app.get('/', function(req, res) {
+//   res.send('hello world');
+// });
 
 app.use("/api/goals", require("./routes/goalRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
