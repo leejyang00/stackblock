@@ -17,6 +17,9 @@ const Home = () => {
   useEffect(() => {
     dispatch(getAllQuestions());
 
+
+
+    // maintain scroll position
     setTimeout(() => {
       if (sessionStorage.getItem(SESS_POS_QUES)) {
         const questionId = sessionStorage.getItem(SESS_POS_QUES);
@@ -49,17 +52,20 @@ const Home = () => {
           className="flex flex-row justify-between mb-6"
         >
           <h2 className="md:text-3xl text-xl mr-5">All Questions</h2>
-          <div className="flex justify-start items-start">
-            <Link to="/ask-a-question">
-              <button className="text-sm whitespace-nowrap mb-3 py-2 px-3 bg-blue-700 hover:bg-blue-600 border border-blue-300 duration-200 text-white rounded-sm font-semibold">
-                Ask Question
-              </button>
-            </Link>
-          </div>
+
+          {localStorage.getItem("user") !== null && (
+            <div className="flex justify-start items-start">
+              <Link to="/ask-a-question">
+                <button className="text-sm whitespace-nowrap mb-3 py-2 px-3 bg-blue-700 hover:bg-blue-600 border border-blue-300 duration-200 text-white rounded-sm font-semibold">
+                  Ask Question
+                </button>
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* get actual number of questions */}
-        <div>2,300 questions</div>
+        <div>{questions.length} questions</div>
 
         <div id="divider" className="py-3 block">
           <div className="w-full border-t border-gray-300"></div>

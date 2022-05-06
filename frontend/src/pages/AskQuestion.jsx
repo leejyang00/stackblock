@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Editor } from "@tinymce/tinymce-react";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,8 @@ import { FileUploader } from "react-drag-drop-files";
 
 import Layout from "../components/Layout";
 import { submitQuestion } from "../features/ask-question/questionSlice";
+import s3ImageService from "../features/s3Images/s3ImageService";
+import axios from "axios";
 
 const fileTypes = ["JPG", "PNG"];
 
@@ -88,6 +90,14 @@ const AskQuestion = () => {
   });
   const { title, body } = question;
 
+  useEffect(() => {
+    const uploadURL = async () => {
+      const { url } = await s3ImageService.getUploadURL();
+      console.log(url, "url");
+    };
+    uploadURL();
+  }, []);
+
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
@@ -95,27 +105,46 @@ const AskQuestion = () => {
     if (title === "" || body === "" || tags.length === 0) {
       toast.error("Please complete the question form");
     } else {
+
+      const imageLinks = []
+
+      for (const image of images) {
+        // upload URL given between s3 and mongo
+        const { url } = await s3ImageService.getUploadURL();
+
+        const config = {
+          headers: {
+            'content-type': 'multipart/form-data' // upload image needs this header
+          }
+        }
+        await axios.put(url, image, config)
+
+        // add image links to mongo server
+        const imageURL = url.split("?")[0];
+        imageLinks.push(imageURL)
+      }
+
       const questionData = {
         title,
         body,
         tags,
+        imageLinks
       };
 
       // submit question, navigate to question profile page
       const response = await dispatch(submitQuestion(questionData));
-      // console.log(response.payload._id, "response AQ");
       navigate(`/question/${response.payload._id}`);
     }
   };
 
+  // handle during image upload, drag & drop or selected by multiple
   const handleUpload = (files) => {
-    // console.log(Object.values(files), "file");
-
-    Object.values(files).map((file) => (
+    Object.values(files).map((file) =>
       setImages((prevState) => [...prevState, file])
-    ))
+    );
   };
 
+  // onChange for title form
   const onChangeHandler = (e) => {
     setQuestion((prevState) => ({
       ...prevState,
@@ -123,6 +152,7 @@ const AskQuestion = () => {
     }));
   };
 
+  // onEditor change in body form
   const onEditorHandler = (content, editor) => {
     setQuestion((prevState) => ({
       ...prevState,
@@ -217,7 +247,8 @@ const AskQuestion = () => {
                   <label htmlFor="tag" className="font-semibold">
                     Images
                     <p className="text-sm text-gray-600 font-normal">
-                      Include any images for your question (only PNG, JPG accepted)
+                      Include any images for your question (only PNG, JPG
+                      accepted)
                     </p>
                   </label>
                 </div>
@@ -235,7 +266,9 @@ const AskQuestion = () => {
                 <div className="flex flex-col space-y-2 my-2">
                   {images &&
                     images.map((image, index) => (
-                      <p key={index} className="text-sm">{image.name}</p>
+                      <p key={index} className="text-sm">
+                        {image.name}
+                      </p>
                     ))}
                 </div>
               </div>
