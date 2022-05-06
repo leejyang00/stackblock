@@ -93,9 +93,7 @@ const QuestionProfile = () => {
     const fetchQuestionAndAnswer = async () => {
       const questionData = await questionService.getQuestion(questionID);
       const answersData = await answerService.getAllAnswers(questionID);
-      const questionUsernameData = await authService.getUser(
-        questionData.user
-      );
+      const questionUsernameData = await authService.getUser(questionData.user);
       setData(questionData);
       setQuestionUsername(questionUsernameData.username);
       setAnswers(answersData);
@@ -237,6 +235,15 @@ const QuestionProfile = () => {
               </div>
             </div>
           </div>
+
+          {data.imageLinks.length > 0 && (
+            <div className="flex flex-wrap space-y-10 my-5">
+              {data.imageLinks.map((image, index) => (
+                <img className="h-72" key={index} src={image} alt={`questionImage-${index}`} />
+              ))}
+            </div>
+          )}
+
           {/* end */}
 
           {answers.length > 0 && (

@@ -24,6 +24,7 @@ const questionSchema = mongoose.Schema(
       default: 0,
     },
     tags: [String],
+    imageLinks: [String]
   },
   {
     timestamps: true,

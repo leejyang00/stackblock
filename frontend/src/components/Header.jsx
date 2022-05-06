@@ -37,10 +37,10 @@ const dropdownPages = [
     title: "Settings",
     path: "/settings",
   },
-  {
-    title: "Earnings",
-    path: "/earnings",
-  },
+  // {
+  //   title: "Earnings",
+  //   path: "/earnings",
+  // },
 ];
 
 const Header = () => {

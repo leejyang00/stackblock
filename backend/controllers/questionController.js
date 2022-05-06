@@ -35,7 +35,7 @@ const getQuestion = asyncHandler(async (req, res) => {
 // @route   POST /api/questions
 // @access  Private
 const submitQuestion = asyncHandler(async (req, res) => {
-  const { title, body, tags } = req.body;
+  const { title, body, tags, imageLinks } = req.body;
 
   if (!body || !title) {
     res.status(400);
@@ -48,6 +48,7 @@ const submitQuestion = asyncHandler(async (req, res) => {
     title: title,
     body: body,
     tags: tags,
+    imageLinks: imageLinks
   });
 
   if (questionAsked) {
