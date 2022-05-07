@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import Layout from "../components/Layout";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllQuestions, reset } from "../features/ask-question/questionSlice";
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 
 import { Link } from "react-router-dom";
 import QuestionList from "../components/Question/questionList";
@@ -14,10 +14,17 @@ const Home = () => {
   const dispatch = useDispatch();
   const { questions } = useSelector((state) => state.questions); // isSuccess
 
+  const [cookies, setCookie, removeCookie] = useCookies(["userCookie"]);
+
+  
+
   useEffect(() => {
     dispatch(getAllQuestions());
 
-
+    if (localStorage.getItem("user")) {
+      console.log("hi");
+      setCookie("userCookie", localStorage.getItem("user"));
+    }
 
     // maintain scroll position
     setTimeout(() => {
