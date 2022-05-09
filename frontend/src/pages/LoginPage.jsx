@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// import { FaSignInAlt } from "react-icons/fa";
+import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from "react-redux";
 // useSelector: select something from the state
 // useDispatch: dispatch function, like register (asyncThunk), or reset in reducer
@@ -92,12 +92,12 @@ const LoginPage = () => {
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
               Don't have an account?{" "}
-              <a
-                href="/register"
+              <Link
+                to="/register"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
                 Register here
-              </a>
+              </Link>
             </p>
           </div>
           <form className="mt-8 space-y-6" onSubmit={onSubmitHandler}>
@@ -154,12 +154,12 @@ const LoginPage = () => {
               </div>
 
               <div className="text-sm">
-                <a
-                  href="/"
+                <Link
+                  to="/"
                   className="font-medium text-indigo-600 hover:text-indigo-500"
                 >
                   Forgot your password?
-                </a>
+                </Link>
               </div>
             </div>
 

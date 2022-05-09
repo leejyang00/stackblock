@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from 'react-router-dom'
 // useSelector: select something from the state
 // useDispatch: dispatch function, like register (asyncThunk), or reset in reducer
 import { useNavigate } from "react-router-dom";
@@ -88,12 +89,12 @@ const RegisterPage = () => {
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
               Have an account?{" "}
-              <a
-                href="/login"
+              <Link
+                to="/login"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
                 Login here
-              </a>
+              </Link>
             </p>
           </div>
           <form className="mt-8 space-y-6" onSubmit={onSubmitHandler}>

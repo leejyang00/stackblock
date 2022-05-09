@@ -3,7 +3,6 @@ import "./PasswordStrength.css";
 
 const PasswordStrength = ({ password }) => {
   const result = zxcvbn(password);
-  console.log(result.score, "score");
 
   const createPasswordLabel = (result) => {
     switch (result.score) {
