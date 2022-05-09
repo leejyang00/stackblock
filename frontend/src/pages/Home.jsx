@@ -22,7 +22,7 @@ const Home = () => {
     dispatch(getAllQuestions());
 
     if (localStorage.getItem("user")) {
-      console.log("hi");
+      // console.log("hi");
       setCookie("userCookie", localStorage.getItem("user"));
     }
 
