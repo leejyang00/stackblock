@@ -7,6 +7,10 @@ const answerSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
+    userId: {
+      type: String,
+      required: true,
+    }, 
     questionId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,

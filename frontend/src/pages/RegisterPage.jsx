@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 // useSelector: select something from the state
 // useDispatch: dispatch function, like register (asyncThunk), or reset in reducer
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { register, reset } from "../features/auth/authSlice";
+import { register, reset, resetUser } from "../features/auth/authSlice";
 import Spinner from "../components/Spinner";
 import PasswordStrength from "../components/Common/PasswordStrength/PasswordStrength";
 import zxcvbn from "zxcvbn";
+import { useCookies } from "react-cookie";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -22,6 +23,7 @@ const RegisterPage = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [cookies, setCookie] = useCookies(["rememberMe"]);
 
   const { user, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.auth
@@ -32,24 +34,25 @@ const RegisterPage = () => {
       toast.error(message);
     }
 
-    if (isSuccess || user) {
-      navigate("/");
-    }
+    // if (isSuccess || user) {
+    //   navigate("/");
+    // }
 
     dispatch(reset());
-  }, [user, isError, isSuccess, message, navigate, dispatch]);
+    dispatch(resetUser());
+  }, [isError, message, dispatch]);
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
-      return
+      return;
     }
     // check password strength
     if (zxcvbn(password).score <= 2) {
       toast.error("Password is too weak");
-      return
+      return;
     }
 
     const userData = {
@@ -60,6 +63,9 @@ const RegisterPage = () => {
 
     // in authSlice Redux, then post data to URI
     dispatch(register(userData));
+    navigate("/");
+    sessionStorage.setItem("login", true);
+    setCookie("rememberMe", false);
   };
 
   const onChangeHandler = (e) => {

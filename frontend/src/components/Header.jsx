@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 import { HiMenuAlt4 } from "react-icons/hi";
 import { AiOutlineClose } from "react-icons/ai";
@@ -7,7 +8,7 @@ import { BsStack } from "react-icons/bs";
 import { IoMdArrowDropdown } from "react-icons/io";
 
 import { useSelector, useDispatch } from "react-redux";
-import { logout, reset } from "../features/auth/authSlice";
+import { reset, resetUser } from "../features/auth/authSlice";
 
 const navPages = [
   {
@@ -47,15 +48,27 @@ const Header = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const [dropDown, setDropDown] = useState(false);
 
+  // eslint-disable-next-line
+  const [cookie, setCookie, deleteCookie] = useCookies();
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
   const signOutHandler = () => {
     setDropDown(false);
-    dispatch(logout());
+
+    // logout functionality
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    sessionStorage.removeItem('login')
+
+    deleteCookie("userCookie");
+    deleteCookie("rememberMe");
+
     dispatch(reset());
-    navigate("/");
+    dispatch(resetUser())
+    navigate("/login");
   };
 
   const NavbarItem = ({ title, path, classProps }) => {
@@ -93,10 +106,7 @@ const Header = () => {
             </button>
           </Link>
           <Link to="/register">
-            <button
-              className="underline border border-1 text-white text-sm font-medium font-sm px-3 py-1.5 mx-2 rounded-md cursor-pointer hover:border-gray-300 hover:text-gray-300 duration-200"
-              onClick={signOutHandler}
-            >
+            <button className="underline border border-1 text-white text-sm font-medium font-sm px-3 py-1.5 mx-2 rounded-md cursor-pointer hover:border-gray-300 hover:text-gray-300 duration-200">
               Register
             </button>
           </Link>
@@ -125,7 +135,9 @@ const Header = () => {
         {dropDown && (
           <div className="z-50 absolute top-10 right-10 my-4 text-base list-none bg-white rounded divide-y divide-gray-300 shadow border border-gray-300">
             <div className="py-3 px-4">
-              <span className="block text-sm text-gray-900">{user.username}</span>
+              <span className="block text-sm text-gray-900">
+                {user.username}
+              </span>
               <span className="block text-sm font-medium text-gray-500 truncate">
                 {user.email}
               </span>

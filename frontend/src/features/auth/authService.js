@@ -34,11 +34,14 @@ const login = async (userData) => {
   return data;
 };
 
-// Logout user
-const logout = async () => {
-  localStorage.removeItem("user");
-  localStorage.removeItem("token");
-};
+// // Logout user
+// const logout = async () => {
+
+//   localStorage.removeItem("user");
+//   localStorage.removeItem("token");
+
+//   // deleteCookie("userCookie");
+// };
 
 // Update user profile
 const updateMe = async (userProfile, token) => {
@@ -54,17 +57,16 @@ const updateMe = async (userProfile, token) => {
 };
 
 // getting username for the question/answer
-const getUser = async(userId) => {
-  const response = await axios.get(API_URL + userId)
-  return response.data
-}
+const getUser = async (userId) => {
+  const response = await axios.get(API_URL + userId);
+  return response.data;
+};
 
 const authService = {
   register,
-  logout,
   login,
   updateMe,
-  getUser
+  getUser,
 };
 
 export default authService;
