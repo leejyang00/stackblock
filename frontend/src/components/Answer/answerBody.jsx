@@ -1,6 +1,7 @@
 import parse from "html-react-parser";
 import { BsCaretDownFill, BsCaretUpFill } from "react-icons/bs";
 import Months from "../Common/Months";
+import { Link } from 'react-router-dom'
 
 const AnswerBody = ({ answer }) => {
   const date = new Date(answer.createdAt);
@@ -41,7 +42,7 @@ const AnswerBody = ({ answer }) => {
                 {date.getFullYear()} at {date.getHours()}:{min}{" "}
               </p>
               <span className="text-sm text-blue-600 font-normal">
-                {answer.user}
+                <Link to={`/user/${answer.userId}`}>{answer.user}</Link>
               </span>
             </div>
           </div>

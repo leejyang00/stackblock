@@ -23,6 +23,7 @@ const OtherUserProfile = () => {
     const fetchUser = async () => {
       const userData = await authService.getUser(userId);
       setUser(userData);
+      console.log(userData, 'userData')
       setJoinedDate(new Date(userData.createdAt));
       setIsLoading(false);
     };

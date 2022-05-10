@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 // useSelector: select something from the state
 // useDispatch: dispatch function, like register (asyncThunk), or reset in reducer
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { login, reset } from "../features/auth/authSlice";
+import { login, reset, resetUser } from "../features/auth/authSlice";
 import Spinner from "../components/Spinner";
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -18,15 +18,13 @@ const LoginPage = () => {
 
   const { email, password, rememberMe } = formData;
 
-  // const [cookies, setCookie, removeCookie] = useCookies(
-  //   ["testing"],
-  //   ["proper"]
-  // );
+  // eslint-disable-next-line
+  const [cookies, setCookie] = useCookies(["rememberMe"]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
+  const { isLoading, isError, message } = useSelector(
     (state) => state.auth
   );
 
@@ -34,11 +32,9 @@ const LoginPage = () => {
     if (isError) {
       toast.error(message);
     }
-    if (isSuccess || user) {
-      navigate("/");
-    }
     dispatch(reset());
-  }, [user, isError, isSuccess, message, navigate, dispatch]);
+    dispatch(resetUser());
+  }, [isError, message, dispatch]);
 
   // form input change handler
   const onChangeHandler = (e) => {
@@ -59,17 +55,17 @@ const LoginPage = () => {
   const onSubmitHandler = (e) => {
     e.preventDefault();
 
+    setCookie("rememberMe", rememberMe, { path: "/",  });
+
     const userData = {
       email,
       password,
     };
 
-    // setCookie("testing", true, { path: "/" });
-
     dispatch(login(userData));
+    navigate("/");
+    sessionStorage.setItem("login", true);
   };
-
-  // handle REMEMBER ME function, set as cookie?
 
   if (isLoading) {
     return <Spinner />;
@@ -102,8 +98,8 @@ const LoginPage = () => {
           </div>
           <form className="mt-8 space-y-6" onSubmit={onSubmitHandler}>
             <div className="rounded-md shadow-sm -space-y-px">
-              <div>
-                <label htmlFor="email-address" className="sr-only">
+              <div className="mb-2">
+                <label htmlFor="email-address" className="text-sm">
                   Email address
                 </label>
                 <input
@@ -114,12 +110,12 @@ const LoginPage = () => {
                   required
                   value={email}
                   onChange={onChangeHandler}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Email address"
+                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="Enter your email address"
                 />
               </div>
-              <div>
-                <label htmlFor="password" className="sr-only">
+              <div className="mb-2">
+                <label htmlFor="password" className="text-sm">
                   Password
                 </label>
                 <input
@@ -130,8 +126,8 @@ const LoginPage = () => {
                   required
                   value={password}
                   onChange={onChangeHandler}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Password"
+                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="Enter your password"
                 />
               </div>
             </div>

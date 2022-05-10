@@ -6,10 +6,11 @@ const Answer = require("../models/answerModel");
 // @route   POST /api/answers
 // @access  Private
 const submitAnswer = asyncHandler(async (req, res) => {
-  const { user, questionId, answerBody } = req.body;
+  const { user, userId,  questionId, answerBody } = req.body;
 
   const answer = await Answer.create({
     user,
+    userId, 
     questionId,
     answerBody,
   });

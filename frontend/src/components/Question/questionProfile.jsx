@@ -121,6 +121,7 @@ const QuestionProfile = () => {
     } else {
       const submitAnswerData = {
         user: user.username,
+        userId: user._id,
         questionId: questionID,
         answerBody: answer,
       };
@@ -229,7 +230,9 @@ const QuestionProfile = () => {
                       : date.getMinutes()}{" "}
                   </p>
                   <span className="text-sm text-blue-600 font-normal">
-                    {questionUsername}
+                    <Link to={`/user/${data.user}`}>
+                      {questionUsername}
+                    </Link>
                   </span>
                 </div>
               </div>
@@ -239,7 +242,12 @@ const QuestionProfile = () => {
           {data.imageLinks.length > 0 && (
             <div className="flex flex-wrap space-y-10 my-5">
               {data.imageLinks.map((image, index) => (
-                <img className="h-72" key={index} src={image} alt={`questionImage-${index}`} />
+                <img
+                  className="h-72"
+                  key={index}
+                  src={image}
+                  alt={`questionImage-${index}`}
+                />
               ))}
             </div>
           )}
