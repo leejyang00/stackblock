@@ -19,7 +19,6 @@ const HomeGoal = () => {
 
   useEffect(() => {
     if (isError) {
-      console.log(message);
       toast.error(message);
     }
 

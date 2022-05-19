@@ -93,7 +93,7 @@ const AskQuestion = () => {
   useEffect(() => {
     const uploadURL = async () => {
       const { url } = await s3ImageService.getUploadURL();
-      console.log(url, "url");
+      // console.log(url, "url");
     };
     uploadURL();
   }, []);

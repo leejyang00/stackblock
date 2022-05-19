@@ -13,7 +13,7 @@ const initialState = {
 
 // Register user
 export const register = createAsyncThunk(
-  "auth/registererer",
+  "auth/register",
   async (user, thunkAPI) => {
     try {
       return await authService.register(user);
@@ -32,7 +32,7 @@ export const register = createAsyncThunk(
 
 // Login user
 export const login = createAsyncThunk(
-  "auth/logininin",
+  "auth/login",
   async (user, thunkAPI) => {
     try {
       return await authService.login(user);
@@ -97,7 +97,7 @@ export const authSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload;
+        // state.user = action.payload;
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;

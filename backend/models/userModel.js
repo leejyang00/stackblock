@@ -6,9 +6,9 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "Please add username value"],
       index: {
-          unique: true
+        unique: true,
       },
-      unique: true
+      unique: true,
     },
     email: {
       type: String,
@@ -23,10 +23,11 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "Please add password"],
     },
-    aboutMe: { type: String},
-    website: { type: String},
-    twitter: { type: String},
-    github: { type: String},
+    aboutMe: { type: String },
+    website: { type: String },
+    twitter: { type: String },
+    github: { type: String },
+    verified: { type: Boolean, default: false },
   },
   {
     timestamps: true,
