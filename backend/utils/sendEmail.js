@@ -3,11 +3,6 @@ const { google } = require("googleapis");
 
 const sendEmail = async (email, subject, text) => {
 
-  // const CLIENT_ID = "120216055346-netfubpjcdel17hp6cdn129dblond97m.apps.googleusercontent.com"
-  // const CLIENT_SECRET = "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"
-  // const REDIRECT_URI = "https://developers.google.com/oauthplayground";
-  // const REFRESH_TOKEN =
-  //   "1//049GVPXMDNeLfCgYIARAAGAQSNwF-L9IrwwuIqnKtyAZ9ndxnnsOsmUgxO5m_fXjFML_G-iV_0pHcv3Y7mwNKshYvdPlQpQ_JoOE";
   const oAuth2Client = new google.auth.OAuth2(
     process.env.CLIENT_ID,
     process.env.CLIENT_SECRET,

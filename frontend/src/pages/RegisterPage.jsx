@@ -2,14 +2,11 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 // useSelector: select something from the state
-// useDispatch: dispatch function, like register (asyncThunk), or reset in reducer
-import { useNavigate } from "react-router-dom";
+// useDispatch: dispatch function, like register (asyncThunk), or reset in reducer p
 import { toast } from "react-toastify";
 import { register, reset, resetUser } from "../features/auth/authSlice";
-import Spinner from "../components/Spinner";
 import PasswordStrength from "../components/Common/PasswordStrength/PasswordStrength";
 import zxcvbn from "zxcvbn";
-import { useCookies } from "react-cookie";
 import { Register, Processing } from "../components/Buttons/index";
 
 const RegisterPage = () => {
@@ -22,8 +19,6 @@ const RegisterPage = () => {
   const [linkSent, setLinkSent] = useState(false);
 
   const { email, username, password, confirmPassword } = formData;
-
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { isLoading, isSuccess, isError, message } = useSelector(
@@ -51,10 +46,10 @@ const RegisterPage = () => {
       return;
     }
     // check password strength
-    // if (zxcvbn(password).score <= 2) {
-    //   toast.error("Password is too weak");
-    //   return;
-    // }
+    if (zxcvbn(password).score <= 2) {
+      toast.error("Password is too weak");
+      return;
+    }
 
     const userData = {
       username,
