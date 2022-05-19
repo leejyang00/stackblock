@@ -7,12 +7,14 @@ const register = async (userData) => {
   const response = await axios.post(API_URL, userData);
   const data = response.data;
 
-  if (response.data) {
-    localStorage.setItem("token", data.token);
-    delete data["token"];
+  // if (response.data) {
+  //   localStorage.setItem("token", data.token);
+  //   delete data["token"];
 
-    localStorage.setItem("user", JSON.stringify(data));
-  }
+  //   localStorage.setItem("user", JSON.stringify(data));
+  // }
+
+  // console.log(data, 'data from authservice')
 
   return data;
 };
@@ -20,28 +22,16 @@ const register = async (userData) => {
 // Login User
 const login = async (userData) => {
   const response = await axios.post(API_URL + "login", userData);
-
   const data = response.data;
 
   if (response.data) {
     localStorage.setItem("token", data.token);
-    // console.log(data, 'UD')
     delete data["token"];
-
     localStorage.setItem("user", JSON.stringify(data));
   }
 
   return data;
 };
-
-// // Logout user
-// const logout = async () => {
-
-//   localStorage.removeItem("user");
-//   localStorage.removeItem("token");
-
-//   // deleteCookie("userCookie");
-// };
 
 // Update user profile
 const updateMe = async (userProfile, token) => {

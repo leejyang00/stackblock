@@ -2,7 +2,6 @@ import {
   HashRouter as Router,
   Routes,
   Route,
-  Navigate,
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,30 +13,35 @@ import RegisterPage from "./pages/RegisterPage";
 import AskQuestion from "./pages/AskQuestion";
 import QuestionProfile from "./components/Question/questionProfile";
 import OtherUserProfile from "./components/Profile/OtherUserProfile";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
+import VerifiedPage from "./pages/VerifiedPage";
+// import { useEffect } from "react";
 
 const App = () => {
-  const [cookies] = useCookies(["rememberMe"]);
+  // const [cookies] = useCookies(["rememberMe"]);
+
+  // console.log(sessionStorage.getItem('login'), 'SESSION LOGIN')
 
   return (
     <>
       <Router>
         <div>
           <Routes>
+            <Route path="/user/verify/:userId/:token" element={<VerifiedPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            {/* <Route path="/" element={<Home />} /> */}
-            <Route
+            <Route path="/" element={<Home />} />
+            {/* <Route
               path="/"
               element={
-                (sessionStorage.getItem("login") === "true" ||
+                (sessionStorage.getItem("login") ||
                 cookies.rememberMe === "true") ? (
                   <Home />
                 ) : (
                   <Navigate to="/login" />
                 )
               }
-            />
+            /> */}
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/ask-a-question" element={<AskQuestion />} />
             <Route path="/question/:questionID" element={<QuestionProfile />} />

@@ -19,21 +19,27 @@ const LoginPage = () => {
   const { email, password, rememberMe } = formData;
 
   // eslint-disable-next-line
-  const [cookies, setCookie] = useCookies(["rememberMe"]);
+  const [cookies, setCookie] = useCookies(["rememberMe", "firstLogin"]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { isLoading, isError, message } = useSelector(
-    (state) => state.auth
-  );
+  const { isLoading, isError, message } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (isError) {
       toast.error(message);
     }
-    dispatch(reset());
-    dispatch(resetUser());
+
+    // if (user) {
+    //   console.log('isSuccess, navigate to home')
+    //   navigate("/")
+    // } else {
+      dispatch(reset());
+      dispatch(resetUser());
+
+    // }
+
   }, [isError, message, dispatch]);
 
   // form input change handler
@@ -52,19 +58,30 @@ const LoginPage = () => {
   };
 
   // login form submit
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
-
-    setCookie("rememberMe", rememberMe, { path: "/",  });
 
     const userData = {
       email,
       password,
     };
 
-    dispatch(login(userData));
-    navigate("/");
-    sessionStorage.setItem("login", true);
+    const result = await dispatch(login(userData));
+
+    if (result.type === "auth/login/rejected") {
+      return;
+    } else {
+      // console.log('success login')
+      navigate("/");
+      // window.location.reload(false);/
+      // console.log('navigate to homee')
+      sessionStorage.setItem("login", true);
+      // console.log('set item session storage')
+      
+      setCookie("rememberMe", rememberMe, { path: "/",  });
+      // setCookie("firstLogin", "first", { path: "/",  });
+      // console.log('set cookie remember me')
+    }
   };
 
   if (isLoading) {
