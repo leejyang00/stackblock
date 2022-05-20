@@ -98,7 +98,7 @@ const RegisterPage = () => {
           </div>
           <form className="mt-8 space-y-6" onSubmit={onSubmitHandler}>
             <div className="rounded-md shadow-sm">
-              <div className="mb-2">
+              <div className="mb-2 space-y-1">
                 <label htmlFor="username" className="text-sm">
                   Username
                 </label>
@@ -114,7 +114,7 @@ const RegisterPage = () => {
                   placeholder="Enter your username"
                 />
               </div>
-              <div className="mb-2">
+              <div className="mb-2 space-y-1">
                 <label htmlFor="email-address" className="text-sm">
                   Email address
                 </label>
@@ -130,7 +130,7 @@ const RegisterPage = () => {
                   placeholder="Enter your email address"
                 />
               </div>
-              <div className="mb-2">
+              <div className="mb-2 space-y-1">
                 <label htmlFor="password" className="text-sm">
                   Password
                 </label>
@@ -150,7 +150,7 @@ const RegisterPage = () => {
               {/* password strength meter */}
               <PasswordStrength password={password} />
 
-              <div className="mb-2">
+              <div className="mb-2 space-y-1">
                 <label htmlFor="confirmPassword" className="text-sm">
                   Confirm Password
                 </label>
@@ -171,7 +171,7 @@ const RegisterPage = () => {
             {!linkSent ? (
               <div>{isLoading ? <Processing /> : <Register />}</div>
             ) : (
-              <div className="border border-green-200 bg-green-100 p-10">
+              <div className="border border-green-200 bg-green-100 p-10 text-center text-sm">
                 <p className="font-semibold">
                   A verification link has been sent to your email.
                 </p>

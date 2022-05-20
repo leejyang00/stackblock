@@ -71,6 +71,83 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Forgot user's password
+// @route   POST /api/user/forgot-password
+const forgotPasswordUser = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    res.status(400);
+    throw new Error("Email does not exists");
+  }
+
+  // verify reset password token
+  const token = await new Token({
+    userId: user._id,
+    token: crypto.randomBytes(16).toString("hex"),
+  }).save();
+
+  const changePasswordUrl = `${process.env.BASE_URL}#/user/change-password/${token.userId}/${token.token}`;
+
+  try {
+    const result = await sendEmail(
+      user.email,
+      "Reset your password - Stackblock",
+      changePasswordUrl
+    );
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400);
+    throw new Error("Forgot password link failed to send");
+  }
+});
+
+// @desc    Change user's password
+// @route   POST /api/user/change-password
+const changePasswordUser = asyncHandler(async (req, res) => {
+
+  const { userId, token, currentPassword, newPassword } =
+    req.body;
+
+  const user = await User.findById(userId)
+
+  if (!user) {
+    res.status(400);
+    throw new Error("Invalid link");
+  }
+
+  const tokenReturned = await Token.findOne({
+    userId: userId,
+    token: token,
+  });
+
+  if (!tokenReturned) {
+    res.status(400);
+    throw new Error("Invalid link");
+  }
+
+  const passwordResult = await bcrypt.compare(currentPassword, user.password);
+  if (!passwordResult) {
+    res.status(400);
+    throw new Error("Invalid credentials logging in");
+  }
+
+  // Hash password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+  try {
+    const result = await User.updateOne({ _id: user._id }, { password: hashedPassword });
+    // console.log(result, '<< RESULT')
+    await tokenReturned.remove();
+    res.status(200).send({message: "Success"})
+  } catch (error) {
+    res.status(400)
+    throw new Error("Failure to change password")
+  }
+});
+
 // @desc    Verify new user
 // @route   GET /api/user/verify/:userId/:token
 const verifyUser = asyncHandler(async (req, res) => {
@@ -141,7 +218,32 @@ const loginUser = asyncHandler(async (req, res) => {
 // @route    GET /api/users/me
 // @access   Private
 const getMe = asyncHandler(async (req, res) => {
-  res.status(200).json(req.user);
+  // console.log(req.body, '<-req.body')
+  const { userId, token } = req.body;
+
+  const user = await User.findById(userId);
+  // console.log(user, "<-user")
+
+  if (!user) {
+    res.status(400);
+    throw new Error("Change password link does not exists");
+  }
+
+  // console.log(token, '<- token')
+
+  const tokenReturned = await Token.findOne({
+    userId: userId,
+    token: token,
+  });
+
+  // console.log(tokenReturned, 'tokenReturned')
+
+  if (!tokenReturned) {
+    res.status(400);
+    throw new Error("Change password link does not exists");
+  }
+
+  res.status(200).json(user);
 });
 
 // @desc    get other user's data, for question and answer profile
@@ -172,6 +274,8 @@ const generateToken = (id) => {
 
 module.exports = {
   registerUser,
+  forgotPasswordUser,
+  changePasswordUser,
   verifyUser,
   loginUser,
   getMe,

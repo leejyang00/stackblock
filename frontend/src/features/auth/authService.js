@@ -19,6 +19,17 @@ const register = async (userData) => {
   return data;
 };
 
+// Change password
+const changePassword = async (userData) => {
+  // console.log(userData, '<-userData')
+  const response = await axios.post(API_URL + "forgot-password", userData);
+  const data = response.data
+
+  return data
+}
+
+// get me
+
 // Login User
 const login = async (userData) => {
   const response = await axios.post(API_URL + "login", userData);
@@ -54,6 +65,7 @@ const getUser = async (userId) => {
 
 const authService = {
   register,
+  changePassword,
   login,
   updateMe,
   getUser,

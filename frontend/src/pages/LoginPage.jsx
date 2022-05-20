@@ -114,8 +114,8 @@ const LoginPage = () => {
             </p>
           </div>
           <form className="mt-8 space-y-6" onSubmit={onSubmitHandler}>
-            <div className="rounded-md shadow-sm -space-y-px">
-              <div className="mb-2">
+            <div className="rounded-md shadow-sm">
+              <div className="mb-2 space-y-1">
                 <label htmlFor="email-address" className="text-sm">
                   Email address
                 </label>
@@ -131,7 +131,7 @@ const LoginPage = () => {
                   placeholder="Enter your email address"
                 />
               </div>
-              <div className="mb-2">
+              <div className="mb-2 space-y-1">
                 <label htmlFor="password" className="text-sm">
                   Password
                 </label>
@@ -168,7 +168,7 @@ const LoginPage = () => {
 
               <div className="text-sm">
                 <Link
-                  to="/"
+                  to="/forgot-password"
                   className="font-medium text-indigo-600 hover:text-indigo-500"
                 >
                   Forgot your password?
