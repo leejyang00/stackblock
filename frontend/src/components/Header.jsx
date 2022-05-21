@@ -15,10 +15,10 @@ const navPages = [
     title: "Home",
     path: "/",
   },
-  {
-    title: "About Us",
-    path: "/about-us",
-  },
+  // {
+  //   title: "About Us",
+  //   path: "/about-us",
+  // },
   {
     title: "Ask a question",
     path: "/ask-a-question",
@@ -35,9 +35,13 @@ const dropdownPages = [
     path: "/profile",
   },
   {
-    title: "Settings",
-    path: "/settings",
+    title: "Ask a question",
+    path: "/ask-a-question",
   },
+  // {
+  //   title: "Settings",
+  //   path: "/settings",
+  // },
   // {
   //   title: "Earnings",
   //   path: "/earnings",
