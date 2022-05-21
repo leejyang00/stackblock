@@ -31,11 +31,25 @@ export const register = createAsyncThunk(
 );
 
 // Login user
-export const login = createAsyncThunk(
-  "auth/login",
+export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
+  try {
+    return await authService.login(user);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+// Update user's favorite questions
+export const updateFavoriteQuestions = createAsyncThunk(
+  "auth/update-fav-ques",
   async (user, thunkAPI) => {
     try {
-      return await authService.login(user);
+      return await authService.updateFavoriteQuestions(user);
     } catch (error) {
       const message =
         (error.response &&
@@ -55,7 +69,7 @@ export const updateMe = createAsyncThunk(
   async (userProfile, thunkAPI) => {
     try {
       // const token = thunkAPI.getState().auth.user.token;
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       return await authService.updateMe(userProfile, token);
     } catch (error) {
       const message =
@@ -85,8 +99,8 @@ export const authSlice = createSlice({
       state.message = "";
     },
     resetUser: (state) => {
-      state.user = null
-    }
+      state.user = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -135,6 +149,20 @@ export const authSlice = createSlice({
         localStorage.setItem("user", JSON.stringify(action.payload));
       })
       .addCase(updateMe.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // update favourite questions
+      .addCase(updateFavoriteQuestions.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateFavoriteQuestions.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload;
+      })
+      .addCase(updateFavoriteQuestions.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

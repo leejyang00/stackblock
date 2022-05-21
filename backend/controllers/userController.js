@@ -106,11 +106,9 @@ const forgotPasswordUser = asyncHandler(async (req, res) => {
 // @desc    Change user's password
 // @route   POST /api/user/change-password
 const changePasswordUser = asyncHandler(async (req, res) => {
+  const { userId, token, currentPassword, newPassword } = req.body;
 
-  const { userId, token, currentPassword, newPassword } =
-    req.body;
-
-  const user = await User.findById(userId)
+  const user = await User.findById(userId);
 
   if (!user) {
     res.status(400);
@@ -138,13 +136,16 @@ const changePasswordUser = asyncHandler(async (req, res) => {
   const hashedPassword = await bcrypt.hash(newPassword, salt);
 
   try {
-    const result = await User.updateOne({ _id: user._id }, { password: hashedPassword });
+    const result = await User.updateOne(
+      { _id: user._id },
+      { password: hashedPassword }
+    );
     // console.log(result, '<< RESULT')
     await tokenReturned.remove();
-    res.status(200).send({message: "Success"})
+    res.status(200).send({ message: "Success" });
   } catch (error) {
-    res.status(400)
-    throw new Error("Failure to change password")
+    res.status(400);
+    throw new Error("Failure to change password");
   }
 });
 
@@ -210,6 +211,7 @@ const loginUser = asyncHandler(async (req, res) => {
     twitter: user.twitter,
     github: user.github,
     createdAt: user.createdAt,
+    favoriteQuestions: user.favoriteQuestions,
     token: generateToken(user._id),
   });
 });
@@ -228,8 +230,6 @@ const getMe = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Change password link does not exists");
   }
-
-  // console.log(token, '<- token')
 
   const tokenReturned = await Token.findOne({
     userId: userId,
@@ -265,6 +265,33 @@ const updateMe = asyncHandler(async (req, res) => {
   res.status(200).json(updatedUser);
 });
 
+// @desc    Update array of favorite questions
+// @route   PUT /api/users/update-favorite-questions
+// @access  Public
+const updateFavoriteQuestion = asyncHandler(async (req, res) => {
+  const { userId, questionId } = req.body;
+
+  const { favoriteQuestions } = await User.findById(userId);
+
+  var result = {};
+
+  if (favoriteQuestions.includes(questionId)) {
+    result = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { favoriteQuestions: questionId } },
+      { new: true }
+    );
+  } else {
+    result = await User.findByIdAndUpdate(
+      userId,
+      { $push: { favoriteQuestions: questionId } },
+      { new: true }
+    );
+  }
+
+  res.status(200).json(result);
+});
+
 // Generate JWT
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -281,4 +308,5 @@ module.exports = {
   getMe,
   getUser,
   updateMe,
+  updateFavoriteQuestion,
 };

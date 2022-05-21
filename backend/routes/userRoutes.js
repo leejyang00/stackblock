@@ -9,6 +9,7 @@ const {
   getMe,
   getUser,
   updateMe,
+  updateFavoriteQuestion
 } = require("../controllers/userController");
 const { protect } = require("../middleware/authMiddleware");
 
@@ -19,5 +20,6 @@ router.get("/:userId", getUser);
 router.get("/verify/:userId/:token", verifyUser); // for verification link
 router.post("/forgot-password", forgotPasswordUser);
 router.post("/change-password", changePasswordUser); // for verification link
+router.post("/update-favorite-questions", updateFavoriteQuestion)
 
 module.exports = router;

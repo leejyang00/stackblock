@@ -4,14 +4,14 @@ import Months from "../Common/Months";
 
 const QuestionList = (props) => {
   const { id, question, onSelect } = props;
-  const { _id, user, username, title, body, ratings, createdAt, tags } =
+  const { _id, user, username, title, body, createdAt, tags } =
     question;
   const date = new Date(createdAt);
 
   return (
     <>
       <div id={id} className="flex flex-col">
-        <div
+        {/* <div
           id="post-summary"
           className="mb-1 flex flex-row justify-start items-center space-x-2 text-sm "
         >
@@ -22,7 +22,7 @@ const QuestionList = (props) => {
           <div className="border border-green-700 py-0.5 px-1 rounded-sm text-green-700">
             <span className="font-semibold">2</span> answers
           </div>
-        </div>
+        </div> */}
         <div id="post-title" className="mb-1">
           <h3 className="text-xl text-blue-700 hover:text-blue-500 hover:cursor-pointer duration-100 ">
             <Link to={`/question/${_id}`} onClick={() => onSelect(id)}>

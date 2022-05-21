@@ -107,9 +107,9 @@ const OtherUserProfile = () => {
               <button className="mr-1 rounded-full px-3 py-1 text-sm text-white bg-blue-600">
                 Profile
               </button>
-              <button className="mr-1 rounded-full px-3 py-1 text-sm hover:bg-gray-200">
+              {/* <button className="mr-1 rounded-full px-3 py-1 text-sm hover:bg-gray-200">
                 Questions
-              </button>
+              </button> */}
               {/* <button className="mr-1 rounded-full px-3 py-1 text-sm hover:bg-gray-200">
               Answers
             </button>

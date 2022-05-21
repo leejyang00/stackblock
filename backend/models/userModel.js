@@ -28,6 +28,7 @@ const userSchema = mongoose.Schema(
     twitter: { type: String },
     github: { type: String },
     verified: { type: Boolean, default: false },
+    favoriteQuestions: [String]
   },
   {
     timestamps: true,
