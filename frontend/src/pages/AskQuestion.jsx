@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Editor } from "@tinymce/tinymce-react";
 import { useNavigate } from "react-router-dom";
@@ -90,13 +90,13 @@ const AskQuestion = () => {
   });
   const { title, body } = question;
 
-  useEffect(() => {
-    const uploadURL = async () => {
-      const { url } = await s3ImageService.getUploadURL();
-      console.log(url, "url");
-    };
-    uploadURL();
-  }, []);
+  // useEffect(() => {
+  //   const uploadURL = async () => {
+  //     const { url } = await s3ImageService.getUploadURL();
+  //     // console.log(url, "url");
+  //   };
+  //   uploadURL();
+  // }, []);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();

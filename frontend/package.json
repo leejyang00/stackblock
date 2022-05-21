@@ -11,6 +11,8 @@
     "@testing-library/user-event": "^7.2.1",
     "@tinymce/tinymce-react": "^4.0.0",
     "axios": "^0.26.1",
+    "bcryptjs": "^2.4.3",
+    "crypto-js": "^4.1.1",
     "html-react-parser": "^1.4.11",
     "http-proxy-middleware": "^2.0.6",
     "jquery": "^3.6.0",

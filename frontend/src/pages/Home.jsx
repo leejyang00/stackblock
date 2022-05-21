@@ -3,45 +3,43 @@ import { useEffect } from "react";
 import Layout from "../components/Layout";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllQuestions, reset } from "../features/ask-question/questionSlice";
-import { resetUser } from "../features/auth/authSlice";
-import { useCookies } from "react-cookie";
 
 import { Link, useNavigate } from "react-router-dom";
 import QuestionList from "../components/Question/questionList";
+import { useCookies } from "react-cookie";
 
 const SESS_POS_QUES = "scroll-position-question";
 
 const Home = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [cookies] = useCookies(['rememberMe'])
   const { questions } = useSelector((state) => state.questions); // isSuccess
 
-  // const [cookies, setCookie] = useCookies(["rememberMe"]);
-  // console.log(cookies, "cookies");
-
   useEffect(() => {
-    // if (cookies.rememberMe !== "true") {
-    //   console.log("navigate login");
-    //   dispatch(resetUser());
-    //   navigate("/login");
-    //   // console.log('yo')
-    // } else {
-    dispatch(getAllQuestions());
-    // }
+    // console.log('came home')
 
-    // maintain scroll position
-    setTimeout(() => {
-      if (sessionStorage.getItem(SESS_POS_QUES)) {
-        const questionId = sessionStorage.getItem(SESS_POS_QUES);
-        const element = document?.getElementById(questionId);
-        element.scrollIntoView({ behavior: "auto", block: "nearest" });
-        sessionStorage.removeItem(SESS_POS_QUES);
-      }
-    }, 300);
+    if (cookies.rememberMe === "true" || sessionStorage.getItem('login')) {
+      dispatch(getAllQuestions());
 
+      // maintain scroll position
+      setTimeout(() => {
+        if (sessionStorage.getItem(SESS_POS_QUES)) {
+          const questionId = sessionStorage.getItem(SESS_POS_QUES);
+          const element = document?.getElementById(questionId);
+          element.scrollIntoView({ behavior: "auto", block: "nearest" });
+          sessionStorage.removeItem(SESS_POS_QUES);
+        }
+      }, 300);
+
+    } else {
+      navigate('/login')
+    }
+  
     return () => {
       dispatch(reset());
     };
-  }, [dispatch]);
+  }, [dispatch, cookies.rememberMe, navigate]);
 
   // store prev scroll position
   const maintainScrollPosition = (id) => {
