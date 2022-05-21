@@ -11,18 +11,19 @@ import {
 
 import AboutMe from "./About";
 import EditProfile from "./EditProfile";
+import UserQuestionList from "./UserQuestionList";
 import Months from "../Common/Months";
 import Days from "../Common/Days";
 
 const UserProfile = () => {
-
   const navigate = useNavigate();
-  // temporary
+
   const [editProfile, setEditProfile] = useState(false);
+  const [profileOrQuestion, setProfileOrQuestion] = useState(true);
 
   const { user } = useSelector((state) => state.auth);
   const date = new Date(user.createdAt);
-  const { website, twitter, github } = user;
+  const { website, twitter, github, favoriteQuestions } = user;
 
   useEffect(() => {
     if (!user) {
@@ -104,27 +105,47 @@ const UserProfile = () => {
         {/* display all questions asked */}
         <div className="w-full px-4 md:px-20 md:mb-4 mb-0 container mx-auto">
           <div className="flex justify-start">
-            <button className="mr-1 rounded-full px-3 py-1 text-sm text-white bg-blue-600">
+            <button
+              className={`mr-1 rounded-full px-3 py-1 text-sm  ${
+                profileOrQuestion
+                  ? "bg-blue-600 text-white"
+                  : "hover:bg-gray-200"
+              }`}
+              onClick={() => setProfileOrQuestion(!profileOrQuestion)}
+            >
               Profile
             </button>
-            <button className="mr-1 rounded-full px-3 py-1 text-sm hover:bg-gray-200">
+            <button
+              className={`mr-1 rounded-full px-3 py-1 text-sm ${
+                !profileOrQuestion
+                  ? "bg-blue-600 text-white"
+                  : "hover:bg-gray-200"
+              }`}
+              onClick={() => setProfileOrQuestion(!profileOrQuestion)}
+            >
               Questions
             </button>
-            {/* <button className="mr-1 rounded-full px-3 py-1 text-sm hover:bg-gray-200">
-              Answers
-            </button>
-            <button className="mr-1 rounded-full px-3 py-1 text-sm hover:bg-gray-200">
-              Tags
-            </button> */}
           </div>
         </div>
 
         {/* sub-content for profile page, [Profile, Questions, Tags, Edit Profile] */}
         <div className="md:px-20 md:py-3 py-2 px-4 container mx-auto flex justify-center items-center">
-          {!editProfile ? (
-            <AboutMe editProfile={setEditProfile} user={user}/>
+          {profileOrQuestion ? (
+            <>
+              {!editProfile ? (
+                <AboutMe editProfile={setEditProfile} user={user} />
+              ) : (
+                <EditProfile editProfile={setEditProfile} />
+              )}
+            </>
           ) : (
-            <EditProfile editProfile={setEditProfile} />
+            <>
+              <div className="flex flex-col space-y-4">
+                {favoriteQuestions.map((questionId, index) => (
+                  <UserQuestionList key={index} questionId={questionId} />
+                ))}
+              </div>
+            </>
           )}
         </div>
       </div>

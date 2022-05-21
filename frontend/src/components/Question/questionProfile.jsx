@@ -1,85 +1,26 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import parse from "html-react-parser";
-// import { passiveSupport } from "passive-events-support/src/utils";
-import { BsCaretDownFill, BsCaretUpFill } from "react-icons/bs";
+import { BsBookmarkDash, BsBookmarkDashFill } from "react-icons/bs";
+import { useSelector, useDispatch } from "react-redux";
 
 import ReactTagInput from "@pathofdev/react-tag-input";
 import { Editor } from "@tinymce/tinymce-react";
-import Layout from "../Layout";
-import Spinner from "../Spinner";
 import TimeFormat from "../Common/TimeFormat";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
+import Layout from "../Layout";
+import Spinner from "../Spinner";
 import questionService from "../../features/ask-question/questionService.js";
 import answerService from "../../features/ask-question/answerService";
 import authService from "../../features/auth/authService";
+import { updateFavoriteQuestions } from "../../features/auth/authSlice";
+
 import AnswerBody from "../Answer/answerBody";
 import Months from "../Common/Months";
 
 const QuestionProfile = () => {
-  // passiveSupport({
-  //   debug: false,
-  //   events: ["touchstart", "touchmove", "touchend", "mousewheel"],
-  //   listeners: [
-  //     //document
-  //     {
-  //       element: "document",
-  //       event: "touchstart",
-  //     },
-  //     {
-  //       element: "document",
-  //       event: "touchmove",
-  //     },
-  //     {
-  //       element: "document",
-  //       event: "mousewheel",
-  //     },
-  //     {
-  //       element: "document",
-  //       event: "touchend",
-  //     },
-  //     // div.tox.tox-tinymce
-  //     {
-  //       element: "div.tox.tox-tinymce",
-  //       event: "touchstart",
-  //     },
-  //     {
-  //       element: "div.tox.tox-tinymce",
-  //       event: "touchmove",
-  //     },
-  //     {
-  //       element: "div.tox.tox-tinymce",
-  //       event: "touchend",
-  //     },
-  //     {
-  //       element: "div.tox.tox-silver-sink.tox-tinymce-aux",
-  //       event: "touchstart",
-  //     },
-  //     {
-  //       element: "div.tox.tox-silver-sink.tox-tinymce-aux",
-  //       event: "touchmove",
-  //     },
-  //     {
-  //       element: "div.tox.tox-silver-sink.tox-tinymce-aux",
-  //       event: "touchend",
-  //     },
-  //     {
-  //       element: "div.root",
-  //       event: "touchstart",
-  //     },
-  //     {
-  //       element: "div.root",
-  //       event: "touchmove",
-  //     },
-  //     {
-  //       element: "div.root",
-  //       event: "touchend",
-  //     },
-  //   ],
-  // });
-
   const { questionID } = useParams();
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -88,9 +29,13 @@ const QuestionProfile = () => {
   const [questionUsername, setQuestionUsername] = useState("");
   const [date, setDate] = useState(null);
 
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const { _id, favoriteQuestions } = user;
+
   useEffect(() => {
-    // fetch question data on first render or reload
     const fetchQuestionAndAnswer = async () => {
+      // fetch question data on first render or reload
       const questionData = await questionService.getQuestion(questionID);
       const answersData = await answerService.getAllAnswers(questionID);
       const questionUsernameData = await authService.getUser(questionData.user);
@@ -139,6 +84,15 @@ const QuestionProfile = () => {
         throw new Error("Unable to submit answer from QuestionProfile");
       }
     }
+  };
+
+  const onFavoriteHandler = () => {
+    const userData = {
+      userId: _id,
+      questionId: questionID,
+    };
+
+    dispatch(updateFavoriteQuestions(userData));
   };
 
   return (
@@ -194,14 +148,12 @@ const QuestionProfile = () => {
               id="question-body-rating"
               className="flex flex-col mr-5 justify-start items-center space-y-1"
             >
-              <button>
-                {<BsCaretUpFill size={30} className="text-gray-400" />}
-              </button>
-              <div className="text-2xl text-gray-500 leading-4">
-                {data.ratings}
-              </div>
-              <button>
-                {<BsCaretDownFill size={30} className="text-gray-400" />}
+              <button onClick={onFavoriteHandler}>
+                {favoriteQuestions.includes(questionID) ? (
+                  <BsBookmarkDashFill size={25} className="text-gray-600" />
+                ) : (
+                  <BsBookmarkDash size={25} className="text-gray-600" />
+                )}
               </button>
             </div>
 
@@ -230,9 +182,7 @@ const QuestionProfile = () => {
                       : date.getMinutes()}{" "}
                   </p>
                   <span className="text-sm text-blue-600 font-normal">
-                    <Link to={`/user/${data.user}`}>
-                      {questionUsername}
-                    </Link>
+                    <Link to={`/user/${data.user}`}>{questionUsername}</Link>
                   </span>
                 </div>
               </div>

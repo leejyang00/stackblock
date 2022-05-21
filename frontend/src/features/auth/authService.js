@@ -44,6 +44,13 @@ const login = async (userData) => {
   return data;
 };
 
+const updateFavoriteQuestions = async (userData) => {
+  const response = await axios.post(API_URL + "update-favorite-questions", userData)
+  const data = response.data;
+
+  return data
+}
+
 // Update user profile
 const updateMe = async (userProfile, token) => {
   const config = {
@@ -67,6 +74,7 @@ const authService = {
   register,
   changePassword,
   login,
+  updateFavoriteQuestions,
   updateMe,
   getUser,
 };
