@@ -15,7 +15,7 @@ const AnswerBody = ({ answer }) => {
     <>
       <div id="answer-body" className="flex flex-row my-3">
         {/* for loop the answers here */}
-        <div
+        {/* <div
           id="question-body-rating"
           className="flex flex-col mr-5 justify-start items-center space-y-1"
         >
@@ -28,7 +28,7 @@ const AnswerBody = ({ answer }) => {
           <button>
             {<BsCaretDownFill size={30} className="text-gray-400" />}
           </button>
-        </div>
+        </div> */}
 
         <div
           id="question-body-content"
