@@ -54,7 +54,7 @@ const QuestionList = (props) => {
           <span className="text-slate-500">
             asked {Months[date.getMonth()]} {date.getDate()},{" "}
             {date.getFullYear()} at {date.getHours()}:
-            {date.getMinutes() < 0
+            {date.getMinutes() < 10
               ? "0" + date.getMinutes()
               : date.getMinutes()}{" "}
           </span>

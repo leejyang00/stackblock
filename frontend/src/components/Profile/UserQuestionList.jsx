@@ -16,7 +16,7 @@ function UserQuestionList(props) {
       setIsLoading(true);
       const result = await questionService.getQuestion(questionId);
       setQuestion(result);
-      console.log(result);
+      // console.log(result);
       const createdDate = new Date(result.createdAt);
       setDate(createdDate);
 
@@ -29,7 +29,7 @@ function UserQuestionList(props) {
   return (
     <>
       {!isLoading && (
-        <div className="flex flex-col">
+        <div className="">
           <div id="post-title" className="mb-1">
             <h3 className="text-xl text-blue-700 hover:text-blue-500 hover:cursor-pointer duration-100 ">
               <Link to={`/question/${question._id}`}>{question.title}</Link>
@@ -62,7 +62,7 @@ function UserQuestionList(props) {
             <span className="text-slate-500">
               asked {Months[date.getMonth()]} {date.getDate()},{" "}
               {date.getFullYear()} at {date.getHours()}:
-              {date.getMinutes() < 0
+              {date.getMinutes() < 10
                 ? "0" + date.getMinutes()
                 : date.getMinutes()}{" "}
             </span>
