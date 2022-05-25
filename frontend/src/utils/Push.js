@@ -1,6 +1,6 @@
-// import axios from "axios";
+import axios from "axios";
 
-// const API_URL = '/api/services/'
+const API_URL = "/api/services/";
 
 const publicVapidKey =
   "BOBhH6roGSouSD7BV45soxqrcnIVdGm5CfJ-M2ahMlXpOXX88P3YIce3SwGTvhdNYRW8bbPhcCDFqS0_3H7D03E";
@@ -70,11 +70,21 @@ export const send = async (title, message) => {
 };
 
 const sendSubscription = async (subscription, title, message) => {
-  return fetch("http://localhost:3001/api/services/subscribe", {
-    method: "POST",
-    body: JSON.stringify({ subscription, title, message }),
-    headers: {
-      "content-type": "application/json",
-    },
-  });
+  return axios.post(
+    API_URL + "subscribe",
+    JSON.stringify({ subscription, title, message }),
+    {
+      headers: {
+        "content-type": "application/json",
+      },
+    }
+  );
+
+  // fetch("http://localhost:3001/api/services/subscribe", {
+  //   method: "POST",
+  //   body: JSON.stringify({ subscription, title, message }),
+  //   headers: {
+  //     "content-type": "application/json",
+  //   },
+  // });
 };

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { BsBookmarkDash, BsBookmarkDashFill } from "react-icons/bs";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 
 import ReactTagInput from "@pathofdev/react-tag-input";
@@ -18,6 +18,11 @@ import questionService from "../../features/ask-question/questionService.js";
 import answerService from "../../features/ask-question/answerService";
 import authService from "../../features/auth/authService";
 import { updateFavoriteQuestions } from "../../features/auth/authSlice";
+import {
+  getLikes,
+  resetQuestionLikes,
+  updateLikes
+} from "../../features/likeQuestion/likeQuestionSlice";
 
 import AnswerBody from "../Answer/answerBody";
 import Months from "../Common/Months";
@@ -34,6 +39,8 @@ const QuestionProfile = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { _id, favoriteQuestions } = user;
+  const { question } = useSelector((state) => state.likeQuestion);
+  // console.log(question?.likes.includes(_id), "<< check")
 
   useEffect(() => {
     // send("Stackblock", "New Question (2)")
@@ -53,10 +60,15 @@ const QuestionProfile = () => {
 
     try {
       fetchQuestionAndAnswer();
+      dispatch(getLikes({ questionId: questionID }));
     } catch (e) {
       throw new Error(e);
     }
-  }, [questionID]);
+
+    return () => {
+      dispatch(resetQuestionLikes());
+    };
+  }, [questionID, dispatch]);
 
   const onEditorHandler = (content, _) => {
     setAnswer(content);
@@ -105,8 +117,16 @@ const QuestionProfile = () => {
     };
 
     dispatch(updateFavoriteQuestions(userData));
-    toast("Saved question updated!")
+    toast("Saved question updated!");
   };
+
+  const onLikeHandler = () => {
+    const likesData = {
+      userId: _id,
+      questionId: questionID
+    }
+    dispatch(updateLikes(likesData))
+  }
 
   return (
     <Layout>
@@ -169,10 +189,14 @@ const QuestionProfile = () => {
                 )}
               </button>
               <div className="flex flex-col justify-center items-center">
-                <button>
-                  <AiOutlineHeart size={25} />
+                <button onClick={onLikeHandler}>
+                  {question?.likes.includes(_id) ? (
+                    <AiFillHeart size={25} className="text-red-500" />
+                  ) : (
+                    <AiOutlineHeart size={25} />
+                  )}
                 </button>
-                <span>0</span>
+                <span>{question?.likes.length}</span>
               </div>
             </div>
 
