@@ -1,6 +1,10 @@
 const asyncHandler = require("express-async-handler");
+const sendEmail = require("../utils/sendEmail");
+
 
 const Answer = require("../models/answerModel");
+const User = require("../models/userModel");
+
 
 // @desc    submit an answer to a question, in questionProfile
 // @route   POST /api/answers
@@ -15,7 +19,20 @@ const submitAnswer = asyncHandler(async (req, res) => {
     answerBody,
   });
 
+  // const questionOwner = await User.findById(questionOwnerId)
+  // console.log(questionOwner, "<< questionOwner")
   if (answer) {
+
+    // send push notification email to owner of the question
+
+    // await sendEmail(
+    //   questionOwner.email,
+    //   ""
+    // )
+
+    // questionOwner.email
+
+
     res.status(200).json(answer);
   } else {
     throw new Error("Unable to submit an answer");

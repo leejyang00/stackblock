@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { BsBookmarkDash, BsBookmarkDashFill } from "react-icons/bs";
+import { AiOutlineHeart } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 
 import ReactTagInput from "@pathofdev/react-tag-input";
@@ -9,6 +10,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import TimeFormat from "../Common/TimeFormat";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { send } from "../../utils/Push";
 
 import Layout from "../Layout";
 import Spinner from "../Spinner";
@@ -34,11 +36,14 @@ const QuestionProfile = () => {
   const { _id, favoriteQuestions } = user;
 
   useEffect(() => {
+    // send("Stackblock", "New Question (2)")
+
     const fetchQuestionAndAnswer = async () => {
       // fetch question data on first render or reload
       const questionData = await questionService.getQuestion(questionID);
       const answersData = await answerService.getAllAnswers(questionID);
       const questionUsernameData = await authService.getUser(questionData.user);
+      // console.log(questionData, "<< questionData");
       setData(questionData);
       setQuestionUsername(questionUsernameData.username);
       setAnswers(answersData);
@@ -79,7 +84,14 @@ const QuestionProfile = () => {
 
       if (response) {
         window.location.reload(true);
-        // console.log("SUCCESS");
+
+        // send push notification email to owner of the question
+        // if (data.user === user._id) {
+        //   send(
+        //     "Stackblock",
+
+        //   )
+        // }
       } else {
         throw new Error("Unable to submit answer from QuestionProfile");
       }
@@ -93,6 +105,7 @@ const QuestionProfile = () => {
     };
 
     dispatch(updateFavoriteQuestions(userData));
+    toast("Saved question updated!")
   };
 
   return (
@@ -146,15 +159,21 @@ const QuestionProfile = () => {
           <div id="question-body" className="flex flex-row my-3">
             <div
               id="question-body-rating"
-              className="flex flex-col mr-5 justify-start items-center space-y-1"
+              className="flex flex-col mr-5 justify-start items-center space-y-5"
             >
               <button onClick={onFavoriteHandler}>
                 {favoriteQuestions.includes(questionID) ? (
-                  <BsBookmarkDashFill size={25} className="text-gray-600" />
+                  <BsBookmarkDashFill size={25} />
                 ) : (
-                  <BsBookmarkDash size={25} className="text-gray-600" />
+                  <BsBookmarkDash size={25} />
                 )}
               </button>
+              <div className="flex flex-col justify-center items-center">
+                <button>
+                  <AiOutlineHeart size={25} />
+                </button>
+                <span>0</span>
+              </div>
             </div>
 
             <div
@@ -177,7 +196,7 @@ const QuestionProfile = () => {
                   <p className="text-gray-600 mb-1">
                     asked {Months[date.getMonth()]} {date.getDate()},{" "}
                     {date.getFullYear()} at {date.getHours()}:
-                    {date.getMinutes() < 0
+                    {date.getMinutes() < 10
                       ? "0" + date.getMinutes()
                       : date.getMinutes()}{" "}
                   </p>
@@ -241,7 +260,7 @@ const QuestionProfile = () => {
                     type="submit"
                     className="m-2 px-3 py-2 bg-blue-700 text-white hover:bg-blue-800 duration-200 rounded-sm text-sm font-semibold"
                   >
-                    Post your question
+                    Post your answer
                   </button>
                 </div>
               </form>

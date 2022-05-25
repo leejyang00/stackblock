@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import Layout from "../components/Layout";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllQuestions, reset } from "../features/ask-question/questionSlice";
+import { send } from "../utils/Push";
 
 import { Link, useNavigate } from "react-router-dom";
 import QuestionList from "../components/Question/questionList";
@@ -13,13 +14,17 @@ const SESS_POS_QUES = "scroll-position-question";
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [cookies] = useCookies(['rememberMe'])
+  const [cookies] = useCookies(["rememberMe"]);
   const { questions } = useSelector((state) => state.questions); // isSuccess
 
   useEffect(() => {
-    // console.log('came home')
 
-    if (cookies.rememberMe === "true" || sessionStorage.getItem('login')) {
+    send(
+      "yo",
+      "Push Push"
+    );
+
+    if (cookies.rememberMe === "true" || sessionStorage.getItem("login")) {
       dispatch(getAllQuestions());
 
       // maintain scroll position
@@ -31,11 +36,10 @@ const Home = () => {
           sessionStorage.removeItem(SESS_POS_QUES);
         }
       }, 300);
-
     } else {
-      navigate('/login')
+      navigate("/login");
     }
-  
+
     return () => {
       dispatch(reset());
     };

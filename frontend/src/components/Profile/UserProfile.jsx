@@ -123,13 +123,14 @@ const UserProfile = () => {
               }`}
               onClick={() => setProfileOrQuestion(!profileOrQuestion)}
             >
-              Questions
+              Saved Questions
             </button>
           </div>
         </div>
 
         {/* sub-content for profile page, [Profile, Questions, Tags, Edit Profile] */}
-        <div className="md:px-20 md:py-3 py-2 px-4 container mx-auto flex justify-center items-center">
+        {/* <div className="md:px-20 md:py-3 py-2 px-4 container mx-auto flex justify-center items-center"> */}
+        <div className="container mx-auto md:px-20 md:py-3 py-2 px-4">
           {profileOrQuestion ? (
             <>
               {!editProfile ? (
