@@ -19,10 +19,10 @@ const Home = () => {
 
   useEffect(() => {
 
-    // send(
-    //   "yo",
-    //   "Push Push"
-    // );
+    send(
+      "yo",
+      "Push Push"
+    );
 
     if (cookies.rememberMe === "true" || sessionStorage.getItem("login")) {
       dispatch(getAllQuestions());
