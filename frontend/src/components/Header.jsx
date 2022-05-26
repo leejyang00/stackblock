@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
-import { HiMenuAlt4 } from "react-icons/hi";
-import { AiOutlineClose } from "react-icons/ai";
+// import { HiMenuAlt4 } from "react-icons/hi";
+// import { AiOutlineClose } from "react-icons/ai";
 import { BsStack } from "react-icons/bs";
 import { IoMdArrowDropdown } from "react-icons/io";
 
@@ -49,7 +49,7 @@ const dropdownPages = [
 ];
 
 const Header = () => {
-  const [toggleMenu, setToggleMenu] = useState(false);
+  // const [toggleMenu, setToggleMenu] = useState(false);
   const [dropDown, setDropDown] = useState(false);
 
   // eslint-disable-next-line

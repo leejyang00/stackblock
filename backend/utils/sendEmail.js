@@ -33,7 +33,7 @@ const sendEmail = async (email, subject, text) => {
       from: "Stackblock  <noreply.stackblock@gmail.com>",
       to: email,
       subject: subject,
-      text: text,
+      html: text,
     };
 
     const result = await transporter.sendMail(mailOptions);

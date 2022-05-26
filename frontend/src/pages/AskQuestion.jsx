@@ -14,6 +14,7 @@ import Layout from "../components/Layout";
 import { submitQuestion } from "../features/ask-question/questionSlice";
 import s3ImageService from "../features/s3Images/s3ImageService";
 import axios from "axios";
+import { send } from "../utils/Push";
 
 const fileTypes = ["JPG", "PNG"];
 
@@ -105,8 +106,7 @@ const AskQuestion = () => {
     if (title === "" || body === "" || tags.length === 0) {
       toast.error("Please complete the question form");
     } else {
-
-      const imageLinks = []
+      const imageLinks = [];
 
       for (const image of images) {
         // upload URL given between s3 and mongo
@@ -114,26 +114,29 @@ const AskQuestion = () => {
 
         const config = {
           headers: {
-            'content-type': 'multipart/form-data' // upload image needs this header
-          }
-        }
-        await axios.put(url, image, config)
+            "content-type": "multipart/form-data", // upload image needs this header
+          },
+        };
+        await axios.put(url, image, config);
 
         // add image links to mongo server
         const imageURL = url.split("?")[0];
-        imageLinks.push(imageURL)
+        imageLinks.push(imageURL);
       }
 
       const questionData = {
         title,
         body,
         tags,
-        imageLinks
+        imageLinks,
       };
 
       // submit question, navigate to question profile page
       const response = await dispatch(submitQuestion(questionData));
-      navigate(`/question/${response.payload._id}`);
+      if (response) {
+        send("Stackblock", "You have posted a new question!");
+        navigate(`/question/${response.payload._id}`);
+      }
     }
   };
 

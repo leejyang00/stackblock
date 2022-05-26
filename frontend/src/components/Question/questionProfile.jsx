@@ -21,7 +21,7 @@ import { updateFavoriteQuestions } from "../../features/auth/authSlice";
 import {
   getLikes,
   resetQuestionLikes,
-  updateLikes
+  updateLikes,
 } from "../../features/likeQuestion/likeQuestionSlice";
 
 import AnswerBody from "../Answer/answerBody";
@@ -35,6 +35,7 @@ const QuestionProfile = () => {
   const [answers, setAnswers] = useState([]); // list of answers for this question
   const [questionUsername, setQuestionUsername] = useState("");
   const [date, setDate] = useState(null);
+  const [isPostingLoading, setIsPostingLoading] = useState(false);
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
@@ -50,7 +51,7 @@ const QuestionProfile = () => {
       const questionData = await questionService.getQuestion(questionID);
       const answersData = await answerService.getAllAnswers(questionID);
       const questionUsernameData = await authService.getUser(questionData.user);
-      // console.log(questionData, "<< questionData");
+      console.log(questionData, "<< questionData");
       setData(questionData);
       setQuestionUsername(questionUsernameData.username);
       setAnswers(answersData);
@@ -76,6 +77,7 @@ const QuestionProfile = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    setIsPostingLoading(true);
 
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
@@ -86,7 +88,11 @@ const QuestionProfile = () => {
         userId: user._id,
         questionId: questionID,
         answerBody: answer,
+        questionOwnerId: data.user,
       };
+
+      await send("Stackblock", "You have submitted a new answer!");
+
 
       const token = localStorage.getItem("token");
       const response = await answerService.submitAnswer(
@@ -96,13 +102,9 @@ const QuestionProfile = () => {
 
       if (response) {
         window.location.reload(true);
-
+        // setIsPostingLoading(false);
         // send push notification email to owner of the question
         // if (data.user === user._id) {
-        //   send(
-        //     "Stackblock",
-
-        //   )
         // }
       } else {
         throw new Error("Unable to submit answer from QuestionProfile");
@@ -123,10 +125,10 @@ const QuestionProfile = () => {
   const onLikeHandler = () => {
     const likesData = {
       userId: _id,
-      questionId: questionID
-    }
-    dispatch(updateLikes(likesData))
-  }
+      questionId: questionID,
+    };
+    dispatch(updateLikes(likesData));
+  };
 
   return (
     <Layout>
@@ -280,12 +282,25 @@ const QuestionProfile = () => {
                 />
 
                 <div className="py-3">
-                  <button
-                    type="submit"
-                    className="m-2 px-3 py-2 bg-blue-700 text-white hover:bg-blue-800 duration-200 rounded-sm text-sm font-semibold"
-                  >
-                    Post your answer
-                  </button>
+                  {isPostingLoading ? (
+                    <button
+                      type="submit"
+                      className="flex flex-row m-2 px-3 py-2 bg-blue-500 text-white hover:bg-blue-800 duration-200 rounded-sm text-sm font-semibold"
+                    >
+                      <svg
+                        className="animate-spin h-5 w-5 border-b-2 rounded-full mr-3"
+                        viewBox="0 0 24 24"
+                      ></svg>
+                      Processing...
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      className="m-2 px-3 py-2 bg-blue-700 text-white hover:bg-blue-800 duration-200 rounded-sm text-sm font-semibold"
+                    >
+                      Post your answer
+                    </button>
+                  )}
                 </div>
               </form>
             </div>
