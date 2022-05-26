@@ -142,9 +142,20 @@ const UserProfile = () => {
           ) : (
             <>
               <div className="flex flex-col space-y-4">
-                {favoriteQuestions.map((questionId, index) => (
-                  <UserQuestionList key={index} questionId={questionId} />
-                ))}
+                {favoriteQuestions.length === 0 ? (
+                  <div className="flex justify-center items-center h-48">You have no questions saved.</div>
+                ) : (
+                  <>
+                    {" "}
+                    {favoriteQuestions.map((questionId, index) => (
+                      <UserQuestionList
+                        key={index}
+                        questionId={questionId}
+                        userId={user._id}
+                      />
+                    ))}
+                  </>
+                )}
               </div>
             </>
           )}

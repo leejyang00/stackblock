@@ -51,6 +51,13 @@ const updateFavoriteQuestions = async (userData) => {
   return data
 }
 
+const deleteFavoriteQuestions = async (userData) => {
+  const response = await axios.post(API_URL + "delete-favorite-questions", userData)
+  const data = response.data;
+
+  return data
+}
+
 // Update user profile
 const updateMe = async (userProfile, token) => {
   const config = {
@@ -75,6 +82,7 @@ const authService = {
   changePassword,
   login,
   updateFavoriteQuestions,
+  deleteFavoriteQuestions,
   updateMe,
   getUser,
 };
