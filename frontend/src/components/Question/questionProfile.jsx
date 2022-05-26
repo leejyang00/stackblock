@@ -51,7 +51,7 @@ const QuestionProfile = () => {
       const questionData = await questionService.getQuestion(questionID);
       const answersData = await answerService.getAllAnswers(questionID);
       const questionUsernameData = await authService.getUser(questionData.user);
-      console.log(questionData, "<< questionData");
+      // console.log(questionData, "<< questionData");
       setData(questionData);
       setQuestionUsername(questionUsernameData.username);
       setAnswers(answersData);
