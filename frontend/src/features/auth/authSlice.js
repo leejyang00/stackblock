@@ -63,6 +63,25 @@ export const updateFavoriteQuestions = createAsyncThunk(
   }
 );
 
+// Update user's favorite questions
+export const deleteFavoriteQuestions = createAsyncThunk(
+  "auth/delete-fav-ques",
+  async (user, thunkAPI) => {
+    try {
+      return await authService.deleteFavoriteQuestions(user);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 // Update user profile
 export const updateMe = createAsyncThunk(
   "auth/updateMe",
@@ -163,6 +182,20 @@ export const authSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(updateFavoriteQuestions.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+       // delete favourite questions
+       .addCase(deleteFavoriteQuestions.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteFavoriteQuestions.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload;
+      })
+      .addCase(deleteFavoriteQuestions.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

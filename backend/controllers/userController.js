@@ -292,6 +292,21 @@ const updateFavoriteQuestion = asyncHandler(async (req, res) => {
   res.status(200).json(result);
 });
 
+// @desc    Delete favorite question
+// @route   PUT /api/users/delete-favorite-questions
+// @access  Public
+const deleteFavoriteQuestion = asyncHandler(async (req, res) => {
+  const { userId, questionId } = req.body;
+
+  const result = await User.findByIdAndUpdate(
+    userId,
+    { $pull: { favoriteQuestions: questionId } },
+    { new: true }
+  );
+
+  res.status(200).json(result);
+});
+
 // Generate JWT
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -309,4 +324,5 @@ module.exports = {
   getUser,
   updateMe,
   updateFavoriteQuestion,
+  deleteFavoriteQuestion
 };

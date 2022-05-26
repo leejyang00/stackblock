@@ -202,7 +202,7 @@ const Header = () => {
         {user ? <DropdownProfileComponent /> : <LogInRegisterComponent />}
 
         {/* Mobile mode - Hamburger Menu  */}
-        {toggleMenu ? (
+        {/* {toggleMenu ? (
           <AiOutlineClose
             fontSize={28}
             className="text-white cursor-pointer md:hidden"
@@ -232,7 +232,7 @@ const Header = () => {
               />
             ))}
           </ul>
-        )}
+        )} */}
       </div>
     </header>
   );

@@ -2,14 +2,19 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import parse from "html-react-parser";
 import Months from "../Common/Months";
+import { useDispatch } from "react-redux";
 
 import questionService from "../../features/ask-question/questionService";
+import { deleteFavoriteQuestions } from "../../features/auth/authSlice";
+
 
 function UserQuestionList(props) {
-  const { questionId } = props;
+  const { questionId, userId } = props;
   const [question, setQuestion] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [date, setDate] = useState(null);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getQuestionDetails = async () => {
@@ -25,6 +30,16 @@ function UserQuestionList(props) {
 
     getQuestionDetails();
   }, [questionId]);
+
+  const onDeleteHandler = () => {
+
+    const userData = {
+      userId: userId,
+      questionId: questionId
+    }
+
+    dispatch(deleteFavoriteQuestions(userData))
+  };
 
   return (
     <>
@@ -66,6 +81,14 @@ function UserQuestionList(props) {
                 ? "0" + date.getMinutes()
                 : date.getMinutes()}{" "}
             </span>
+          </div>
+          <div>
+            <button
+              onClick={onDeleteHandler}
+              className="px-3 py-2 rounded-md text-white bg-red-500 text-xs hover:bg-red-600"
+            >
+              Delete
+            </button>
           </div>
 
           <div id="divider" className="py-3 block">
